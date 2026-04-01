@@ -13,7 +13,152 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+
+<section class="relative h-[921px] flex items-center justify-center overflow-hidden px-8">
+    <div class="absolute inset-0 z-0">
+        <div class="absolute inset-0 bg-on-surface/20 z-10"></div>
+        <img class="w-full h-full object-cover" data-alt="Luxurious wedding banquet hall with high ceilings, crystal chandeliers, and long tables decorated with white floral arrangements and candles." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoG-bNfn5ZJQFvKhhD9e3ehee36HkcSvhtqm22pBTpNKi4WY7DftypomTEsigl4w6tBEFWSrcjhkKEKrbXlsI6AdaJGKRG_FfH_3W6qY8Lx4hxgFhHBjXuhyc7fVwFBHQhRxYocHZbf371Hr0dFEP4qORyFrAsTGS691jkB7i0fzYtQ_YnuUBNSvEQH9k0x9x9hedsD6pHY86Og1hqASuODwtwsrOCAnnaUJA-2ihx6ktzANGBplPkcLoI5qVE1d9InHVB7n4u8OA"/>
+    </div>
+    <div class="relative z-20 text-center max-w-4xl">
+        <p class="font-label text-white text-xs tracking-[0.3em] uppercase mb-6 opacity-90">Curating Unforgettable Moments</p>
+        <h1 class="font-headline text-5xl md:text-7xl lg:text-8xl text-white mb-12 tracking-tight">
+            Where <span class="serif-italic">Elegance</span><br/>Meets Celebration
+        </h1>
+        <!-- Search Bar -->
+        <div class="bg-surface-container-lowest/90 backdrop-blur-md p-2 md:p-3 rounded-lg shadow-2xl flex flex-col md:flex-row gap-2 max-w-3xl mx-auto">
+            <div class="flex-1 flex items-center px-4 border-r border-outline-variant/20">
+                <span class="material-symbols-outlined text-primary mr-3">location_on</span>
+                <input class="w-full bg-transparent border-none focus:ring-0 font-body text-on-surface placeholder:text-on-surface-variant/50" placeholder="Search destinations..." type="text"/>
+            </div>
+            <div class="flex-1 flex items-center px-4 border-r border-outline-variant/20">
+                <span class="material-symbols-outlined text-primary mr-3">calendar_month</span>
+                <input class="w-full bg-transparent border-none focus:ring-0 font-body text-on-surface placeholder:text-on-surface-variant/50" placeholder="Wedding Date" type="text"/>
+            </div>
+            <button class="bg-primary text-on-primary px-8 py-4 rounded-lg font-label text-sm tracking-widest uppercase hover:bg-primary-container transition-colors shrink-0">
+                Find Venues
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Halls Bento Grid -->
+<section class="py-32 px-8 max-w-7xl mx-auto">
+    <div class="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
+        <div class="max-w-xl">
+            <span class="font-label text-primary text-xs tracking-[0.2em] uppercase mb-4 block">Exquisite Selection</span>
+            <h2 class="font-headline text-4xl md:text-5xl text-on-surface leading-tight">Featured <span class="serif-italic">Wedding Halls</span></h2>
+        </div>
+        <a class="font-label text-sm tracking-widest uppercase text-on-surface-variant hover:text-primary border-b border-primary/30 pb-1 transition-all" href="#">View All Destinations</a>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+        <!-- Large Feature -->
+        <div class="md:col-span-7 group cursor-pointer">
+            <div class="relative overflow-hidden rounded-lg aspect-[4/3] mb-6">
+                <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Opulent French chateau wedding reception with floor-to-ceiling windows and lush greenery hanging from gold trusses" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRDy88Ky-YPvvPBfxy5sHAYIERYE0BqAal46k56V29jIGOxTwC-Tf-IE08r4MKgXLtA59FVpdXOn4O0shkaap-1PiFSFGXGuoc2T0qBWrcXUYr65XKNax4ZIgNaahghOwaFxM6r_l-IOvtQQ_h_x21xwSStxi4Z19q1MzpHhV-9tejzObbHeggSUjw6tuuFWcLzNJXaCGBAafIMSUR31s_dFYq5jAS64mUNaunj1JElB9Jz9Deo4BP8sKvCgEh4_FyfPCZUaINRQc"/>
+                <div class="absolute top-6 left-6 bg-surface-container-lowest/90 px-4 py-1 text-[10px] font-label tracking-widest uppercase">Paris, France</div>
+            </div>
+            <h3 class="font-headline text-2xl mb-2">The Grand Pavilion</h3>
+            <p class="text-on-surface-variant font-body text-sm leading-relaxed mb-4">An architectural masterpiece combining neo-classical grandeur with modern editorial touches.</p>
+            <div class="flex items-center gap-4 text-primary">
+                <span class="font-label text-xs tracking-widest uppercase">Starting at $12,500</span>
+            </div>
+        </div>
+        <!-- Side Stack -->
+        <div class="md:col-span-5 flex flex-col gap-12">
+            <div class="group cursor-pointer">
+                <div class="relative overflow-hidden rounded-lg aspect-video mb-4">
+                    <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Minimalist modern wedding venue with white walls, arched windows, and soft natural sunlight casting long shadows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjniUzxbN8gJMPJ-2_8g1fbSlR4eG0U7j1mrN83wB0RwM4JFYujxibfzuKPAlwF8jzZT94ym32I8JV88CJN83wOXaiN11Oz4ZKZwGreInVRhiG3w9tu5vo9KbNxd15ATHK8JlFlztngeG7v59EVxMcZXkqfCN3KEolzAi_mO-QysWUW9RGMo4OD5x5ERTIgRbqC9j0nVXTIUuk1YxiG3BLFnUUGbhg_QKVBOGOBxgoJnNN0iHY0gGVC_5c4RrS2UdXKAeQf29hexk"/>
+                </div>
+                <h3 class="font-headline text-xl mb-1">L'Orangerie Sanctuary</h3>
+                <p class="font-label text-xs text-on-surface-variant tracking-widest uppercase">Tuscany, Italy</p>
+            </div>
+            <div class="group cursor-pointer">
+                <div class="relative overflow-hidden rounded-lg aspect-video mb-4">
+                    <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Coastal cliffside wedding venue at dusk with thousands of fairy lights and ocean views in the background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCj_8QbwveEt7I2BgCkE_2S_L6Dh4zXKCLxWy3PvANpDm1cVXJ4FNoxFfkawzmpO0SqBUAxmQIyuPBnJe7VuFNETmdHr4odsGkfhxstxl0fwLD8O9A9eRBKaDxibn-UaLqWfKBt3K5K3k5C90gZDPi6IMlW-JKg6nwBRp8_KyMiFvGNRDq6J3xD6ErjJOxFBRi_iBUJhZ92Sdv3bNozaza2eUiIUxB9jNlSbD41oBkqqPl3b9DNxTd6ikBsrhLVBSUXzIjt0JkwcB8"/>
+                </div>
+                <h3 class="font-headline text-xl mb-1">Cote d'Azur Terrace</h3>
+                <p class="font-label text-xs text-on-surface-variant tracking-widest uppercase">Nice, France</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services: High Contrast Asymmetric Layout -->
+<section class="bg-surface-container-low py-32 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-8">
+        <!-- Culinary Section -->
+        <div class="flex flex-col lg:flex-row items-center gap-20 mb-40">
+            <div class="w-full lg:w-1/2 relative">
+                <div class="absolute -top-10 -left-10 w-40 h-40 bg-primary/5 rounded-full blur-3xl"></div>
+                <img class="relative z-10 w-full rounded-lg shadow-xl translate-x-4 lg:translate-x-0" data-alt="Artistic plating of a gourmet wedding course featuring edible flowers and delicate garnishes on fine ceramic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8Qal5H_UIKSJu3JwFJv4GY35seBsYKdt4r5i5oPXCrq6Uy2IVblgtYhpz19-c-xwG6D6anyQLcGn3udALjJPI4ew_scsbqU1znp-6RW6GEdOCu6DnKjNRI7tgpm38EgQhKAI2--Y6sz9SPOVI4oLILRDJip8EGYoKweJqQ1HIMBYnu9jdSKSFBpXMPBfnFgr9GNboNnzHKgdvA1p7w6QbYVkS5KbQ-HEdMqikf2o9EfCLWfHivAMZAE3-AOUluejPnTiJurfan8U"/>
+                <div class="absolute -bottom-12 -right-12 w-2/3 hidden lg:block">
+                    <img class="rounded-lg shadow-2xl border-4 border-surface" data-alt="Close-up of crystal champagne flutes being filled at a high-end wedding reception bar." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOH70ZUfzTB6Z5DGA9nk-T2oy_R6wVAjhM_z08mJqTaanifnWASFERRjZuW7GXReIG2VdqYiSUUoS3o2ZA295TJkx0iQUqCgnYFclrirMFdJ6tiwtH57Uv7z9cesZPaTyUw_LhW99XfLS7NCHjPfw_zJs8_sWiKD0uVaaYUC2exr0JYqJW14a2pApDtHsDwgAU_NCEsi0dRfmsZBMSRfK3V_xzu0taxYt7NS-BzC5U63L2Ac5wJYRj6se-cVy5wCNPrjih-rUz9Zc"/>
+                </div>
+            </div>
+            <div class="w-full lg:w-1/2">
+                <span class="font-label text-primary text-xs tracking-[0.2em] uppercase mb-4 block">Gastronomy</span>
+                <h2 class="font-headline text-4xl md:text-5xl text-on-surface mb-8 leading-tight">Curated <span class="serif-italic">Culinary</span> Experiences</h2>
+                <p class="font-body text-on-surface-variant text-lg leading-relaxed mb-10 max-w-md">
+                    Our Michelin-star partners craft bespoke menus that tell your story through flavor, using seasonal ingredients and avant-garde presentation.
+                </p>
+                <div class="space-y-6">
+                    <div class="flex items-start gap-4">
+                        <span class="material-symbols-outlined text-primary-container">restaurant_menu</span>
+                        <div>
+                            <h4 class="font-headline text-lg mb-1">Custom Tasting Menus</h4>
+                            <p class="text-sm text-on-surface-variant">Personalized 5-course journeys designed by world-renowned chefs.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <span class="material-symbols-outlined text-primary-container">local_bar</span>
+                        <div>
+                            <h4 class="font-headline text-lg mb-1">Artisanal Mixology</h4>
+                            <p class="text-sm text-on-surface-variant">Signature cocktail bars featuring rare spirits and botanical infusions.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Decoration Section -->
+        <div class="flex flex-col lg:flex-row-reverse items-center gap-20">
+            <div class="w-full lg:w-1/2 relative">
+                <img class="relative z-10 w-full rounded-lg shadow-xl" data-alt="Stunning floral installation with cascading white orchids and roses hanging above a mirrored wedding aisle." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAswnccLgtu9fbRce_T4yX_wx4l0iLrNEaFFpufpcoaaXxLMf-OAI3n-htTsv7G4rZnFOINvYTUaHVJ3dgxysfp0TkQAMG66UJGSSdmz5siSiJDTbgwG8lAFSS0oyHHUJcGEwVzIi8gxF-Wg_2aL5rATPYDWfk_ZKV0l9lkolsF0XuSq87JQU7x60T4n4xc-XWhJMXsz-VVfYmcSFpEPlUgYYbnXpp9m69J6G0EIGCHd3wteZihssFRpRBp3Oub2xPSjSOQx6Se50"/>
+                <div class="absolute -top-12 -left-12 w-1/2 hidden lg:block">
+                    <img class="rounded-lg shadow-2xl border-4 border-surface" data-alt="Detailed shot of elegant gold-rimmed place settings with hand-lettered calligraphy name cards." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDYIT-aWPe52TMAm-HMfVa2TKQZIZrsOz4GGOGmuyLMZu3-jCOBbgLhokXVA-mG4gcFc9XZEXpUze28fBbXQh1g15MRdinlzz0YWZ0dhrcbuPBlebJ9dDWJ0n15a5LJfaJUIIhO9WDVh3aJDBfpa_myNmki1mjR5ewKHuGoFkMxFrm8T6WpsiOELui4-uViecMmRJS0mKUn8k9fW8EydELL4EC0rA-n9I9VZsl1nHZK6wryffHkS2d1l8Q8j-6x8tdgVnDInnrgIQ"/>
+                </div>
+            </div>
+            <div class="w-full lg:w-1/2">
+                <span class="font-label text-primary text-xs tracking-[0.2em] uppercase mb-4 block">Aesthetics</span>
+                <h2 class="font-headline text-4xl md:text-5xl text-on-surface mb-8 leading-tight">Editorial <span class="serif-italic">Floral</span> &amp; Decor</h2>
+                <p class="font-body text-on-surface-variant text-lg leading-relaxed mb-10 max-w-md">
+                    We transform spaces into ethereal landscapes. Our designers work with the world's finest florists to create immersive sensory environments.
+                </p>
+                <button class="font-label text-sm tracking-widest uppercase py-4 px-10 border border-outline-variant text-on-surface hover:bg-on-surface hover:text-surface transition-all">
+                    Explore Design Portfolios
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Luxury Stats -->
+<section class="py-24 px-8">
+    <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
+        <div>
+            <div class="font-headline text-4xl text-primary mb-2">500+</div>
+            <div class="font-label text-[10px] tracking-[0.2em] uppercase text-on-surface-variant">Venues Worldwide</div>
+        </div>
+        <div>
+            <div class="font-headline text-4xl text-primary mb-2">12k</div>
+            <div class="font-label text-[10px] tracking-[0.2em] uppercase text-on-surface-variant">Stories Told</div>
+        </div>
+        <div>
+            <div class="font-headline text-4xl text-primary mb-2">85+</div>
+            <div class="font-label text-[10px] tracking-[0.2em] uppercase text-on-surface-variant">Global Awards</div>
+        </div>
+        <div>
+            <div class="font-headline text-4xl text-primary mb-2">24/7</div>
+            <div class="font-label text-[10px] tracking-[0.2em] uppercase text-on-surface-variant">Concierge Support</div>
+        </div>
+    </div>
+</section>

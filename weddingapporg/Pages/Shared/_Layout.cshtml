@@ -1,129 +1,134 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
-
+<html class="light" lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - weddingapporg</title>
-    <!--begin::Accessibility Meta Tags-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-    <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" content="#007bff" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)" />
-    <!--end::Accessibility Meta Tags-->
-    <!--begin::Primary Meta Tags-->
-    <meta name="title" content="AdminLTE 4 | Login Page" />
-    <meta name="author" content="ColorlibHQ" />
-    <meta name="description"
-          content="AdminLTE is a Free Bootstrap 5 Admin Dashboard, 30 example pages using Vanilla JS. Fully accessible with WCAG 2.1 AA compliance." />
-    <meta name="keywords"
-          content="bootstrap 5, bootstrap, bootstrap 5 admin dashboard, bootstrap 5 dashboard, bootstrap 5 charts, bootstrap 5 calendar, bootstrap 5 datepicker, bootstrap 5 tables, bootstrap 5 datatable, vanilla js datatable, colorlibhq, colorlibhq dashboard, colorlibhq admin dashboard, accessible admin panel, WCAG compliant" />
-    <!--end::Primary Meta Tags-->
-    <!--begin::Accessibility Features-->
-    <!-- Skip links will be dynamically added by accessibility.js -->
-    <meta name="supported-color-schemes" content="light dark" />
-    <link rel="preload" href="~/css/adminlte.css" as="style" />
-    <!--end::Accessibility Features-->
-    <!--begin::Fonts-->
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/@@fontsource/source-sans-3@@5.0.12/index.css"
-          integrity="sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q="
-          crossorigin="anonymous"
-          media="print"
-          onload="this.media = 'all'" />
-    <!--end::Fonts-->
-    <!--begin::Third Party Plugin(OverlayScrollbars)-->
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/overlayscrollbars@@2.11.0/styles/overlayscrollbars.min.css"
-          crossorigin="anonymous" />
-    <!--end::Third Party Plugin(OverlayScrollbars)-->
-    <!--begin::Third Party Plugin(Bootstrap Icons)-->
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@@1.13.1/font/bootstrap-icons.min.css"
-          crossorigin="anonymous" />
-    <!--end::Third Party Plugin(Bootstrap Icons)-->
-    <!--begin::Required Plugin(AdminLTE)-->
-    <link rel="stylesheet" href="~/css/adminlte.css" />
-    <!--end::Required Plugin(AdminLTE)-->
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;family=Manrope:wght@300;400;500;600&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-surface-variant": "#4e4639",
+                        "primary-fixed": "#ffdea5",
+                        "on-primary-fixed": "#261900",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "on-error-container": "#93000a",
+                        "surface-tint": "#775a19",
+                        "primary": "#775a19",
+                        "secondary-fixed": "#e4e2e1",
+                        "tertiary-fixed-dim": "#c9c6c1",
+                        "primary-container": "#c5a059",
+                        "surface-container-low": "#f4f3f2",
+                        "surface-dim": "#dadad9",
+                        "tertiary-fixed": "#e5e2dc",
+                        "error-container": "#ffdad6",
+                        "surface-bright": "#faf9f8",
+                        "on-error": "#ffffff",
+                        "secondary-container": "#e4e2e1",
+                        "primary-fixed-dim": "#e9c176",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "on-secondary": "#ffffff",
+                        "tertiary-container": "#a7a5a0",
+                        "surface-container-high": "#e9e8e7",
+                        "on-primary-container": "#4e3700",
+                        "on-tertiary-container": "#3b3b37",
+                        "on-secondary-container": "#656464",
+                        "inverse-primary": "#e9c176",
+                        "tertiary": "#5f5e5a",
+                        "error": "#ba1a1a",
+                        "on-surface": "#1a1c1c",
+                        "surface-container": "#eeeeed",
+                        "outline": "#7f7667",
+                        "secondary": "#5f5e5e",
+                        "on-tertiary-fixed": "#1c1c18",
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "background": "#faf9f8",
+                        "on-secondary-fixed-variant": "#474747",
+                        "surface": "#faf9f8",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#2f3130",
+                        "inverse-on-surface": "#f1f0f0",
+                        "on-background": "#1a1c1c",
+                        "outline-variant": "#d1c5b4",
+                        "on-tertiary-fixed-variant": "#474743",
+                        "surface-container-highest": "#e3e2e1",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "surface-variant": "#e3e2e1"
+                    },
+                    fontFamily: {
+                        "headline": ["Noto Serif"],
+                        "body": ["Manrope"],
+                        "label": ["Manrope"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .serif-italic { font-family: 'Noto Serif'; font-style: italic; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+    
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">weddingapporg</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                        <a class="nav-link" asp-area="Identity" asp-page="/Account/EditProfile">Edit Profile</a>
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+<body class="bg-surface text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - weddingapporg - <a asp-area="" asp-page="/Privacy">Privacy</a>
+    <!-- ========== HEADER من كود HTML ========== -->
+    <nav class="fixed top-0 w-full z-50 bg-[#faf9f8] dark:bg-stone-950/80 backdrop-blur-xl shadow-[0_20px_40px_rgba(26,28,28,0.04)]">
+        <div class="flex justify-between items-center px-8 py-6 max-w-full mx-auto font-['Noto_Serif'] antialiased tracking-tight">
+            <div class="text-2xl font-serif italic text-[#1a1c1c] dark:text-[#faf9f8]">
+                The Editorial Wedding
+            </div>
+            <div class="hidden md:flex items-center space-x-12">
+                <a class="text-[#775a19] dark:text-[#c5a059] border-b border-[#775a19] pb-1 hover:opacity-80 transition-all duration-300" asp-page="/Index">Venues</a>
+                <a class="text-[#1a1c1c]/70 dark:text-[#faf9f8]/70 hover:text-[#775a19] transition-colors" asp-page="/Services">Services</a>
+                <a class="text-[#1a1c1c]/70 dark:text-[#faf9f8]/70 hover:text-[#775a19] transition-colors" asp-page="/MyBookings">My Bookings</a>
+            </div>
+            <div class="flex items-center space-x-6">
+                <partial name="_LoginPartial" />
+            </div>
+        </div>
+    </nav>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <main class="pt-24">
+        @RenderBody()
+    </main>
+
+    <!-- ========== FOOTER من كود HTML ========== -->
+    <footer class="bg-[#f4f3f2] dark:bg-stone-900 w-full border-t border-stone-200/50 dark:border-stone-800/50">
+        <div class="flex flex-col md:flex-row justify-between items-center px-12 py-16 w-full font-['Manrope'] text-sm tracking-widest uppercase">
+            <div class="mb-8 md:mb-0">
+                <div class="text-lg font-serif text-[#1a1c1c] dark:text-[#faf9f8] lowercase italic mb-2">the editorial wedding</div>
+                <p class="text-[10px] opacity-60 normal-case tracking-normal font-light">© 2024 The Editorial Wedding Experience. All rights reserved.</p>
+            </div>
+            <div class="flex flex-wrap justify-center gap-8">
+                <a class="text-[#1a1c1c]/60 dark:text-[#faf9f8]/60 hover:text-[#775a19] dark:hover:text-[#c5a059] transition-colors" asp-page="/Contact">Contact Us</a>
+                <a class="text-[#1a1c1c]/60 dark:text-[#faf9f8]/60 hover:text-[#775a19] dark:hover:text-[#c5a059] transition-colors" asp-page="/Privacy">Privacy Policy</a>
+                <a class="text-[#1a1c1c]/60 dark:text-[#faf9f8]/60 hover:text-[#775a19] dark:hover:text-[#c5a059] transition-colors" asp-page="/Terms">Terms of Service</a>
+                <a class="text-[#1a1c1c]/60 dark:text-[#faf9f8]/60 hover:text-[#775a19] dark:hover:text-[#c5a059] transition-colors" href="#">Instagram</a>
+                <a class="text-[#1a1c1c]/60 dark:text-[#faf9f8]/60 hover:text-[#775a19] dark:hover:text-[#c5a059] transition-colors" href="#">Pinterest</a>
+            </div>
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@@2.11.0/browser/overlayscrollbars.browser.es6.min.js"
-            crossorigin="anonymous"></script>
-    <!--end::Third Party Plugin(OverlayScrollbars)--><!--begin::Required Plugin(popperjs for Bootstrap 5)-->
-    <script src="https://cdn.jsdelivr.net/npm/@@popperjs/core@@2.11.8/dist/umd/popper.min.js"
-            crossorigin="anonymous"></script>
-    <!--end::Required Plugin(popperjs for Bootstrap 5)--><!--begin::Required Plugin(Bootstrap 5)-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@@5.3.7/dist/js/bootstrap.min.js"
-            crossorigin="anonymous"></script>
-    <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
-    <script src="~/js/adminlte.js"></script>
-    <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
-    <script>
-        const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
-        const Default = {
-        scrollbarTheme: 'os-theme-light',
-        scrollbarAutoHide: 'leave',
-        scrollbarClickScroll: true,
-        };
-        document.addEventListener('DOMContentLoaded', function () {
-        const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
-
-        // Disable OverlayScrollbars on mobile devices to prevent touch interference
-        const isMobile = window.innerWidth <= 992;
-
-        if (
-        sidebarWrapper &&
-        OverlayScrollbarsGlobal?.OverlayScrollbars !== undefined &&
-        !isMobile
-        ) {
-        OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
-        scrollbars: {
-        theme: Default.scrollbarTheme,
-        autoHide: Default.scrollbarAutoHide,
-        clickScroll: Default.scrollbarClickScroll,
-        },
-        });
-        }
-        });
-    </script>
-    <!--end::OverlayScrollbars Configure-->
-    <!--end::Script-->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
