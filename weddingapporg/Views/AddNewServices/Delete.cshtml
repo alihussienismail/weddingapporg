@@ -1,0 +1,70 @@
+@model weddingapporg.Models.Service
+@{
+    ViewData["Title"] = "Delete Service";
+}
+
+<div class="max-w-xl mx-auto px-6 py-10">
+
+    <!-- Header -->
+    <div class="mb-8">
+        <a asp-action="Index" class="inline-flex items-center gap-1 text-sm text-[#775a19] hover:underline mb-4">
+            <span class="material-symbols-outlined text-base">arrow_back</span> Back to Services
+        </a>
+        <h1 class="text-3xl font-headline font-bold text-[#1a1c1c] tracking-tight">Delete Service</h1>
+        <p class="text-sm text-red-500 mt-1">This action cannot be undone.</p>
+    </div>
+
+    <!-- Confirmation Card -->
+    <div class="bg-white rounded-2xl shadow-sm border border-red-200 p-8">
+
+        <!-- Warning Banner -->
+        <div class="flex items-start gap-3 bg-red-50 border border-red-200 rounded-xl px-4 py-3 mb-6">
+            <span class="material-symbols-outlined text-red-500 mt-0.5">warning</span>
+            <p class="text-sm text-red-700">
+                You are about to permanently delete <strong>@Model.Service_Name</strong>. This cannot be recovered.
+            </p>
+        </div>
+
+        <!-- Service Summary -->
+        <dl class="space-y-4 text-sm">
+            <div class="flex justify-between border-b border-[#e3e2e1] pb-3">
+                <dt class="text-[#4e4639]/70 font-medium">Service Name</dt>
+                <dd class="text-[#1a1c1c] font-semibold">@Model.Service_Name</dd>
+            </div>
+            <div class="flex justify-between border-b border-[#e3e2e1] pb-3">
+                <dt class="text-[#4e4639]/70 font-medium">Type</dt>
+                <dd class="text-[#1a1c1c]">Type @Model.ServiceType</dd>
+            </div>
+            <div class="flex justify-between border-b border-[#e3e2e1] pb-3">
+                <dt class="text-[#4e4639]/70 font-medium">City</dt>
+                <dd class="text-[#1a1c1c]">@Model.City</dd>
+            </div>
+            <div class="flex justify-between border-b border-[#e3e2e1] pb-3">
+                <dt class="text-[#4e4639]/70 font-medium">Price</dt>
+                <dd class="text-[#775a19] font-semibold">@Model.Price.ToString("C")</dd>
+            </div>
+            @if (Model.Capacity.HasValue)
+            {
+                <div class="flex justify-between pb-3">
+                    <dt class="text-[#4e4639]/70 font-medium">Capacity</dt>
+                    <dd class="text-[#1a1c1c]">@Model.Capacity guests</dd>
+                </div>
+            }
+        </dl>
+
+        <!-- Confirm Form -->
+        <form asp-action="Delete" method="post" class="mt-8 pt-6 border-t border-[#e3e2e1]">
+            <input type="hidden" asp-for="Id" />
+            <div class="flex items-center justify-end gap-4">
+                <a asp-action="Index"
+                   class="px-6 py-2.5 text-sm font-semibold text-[#4e4639] hover:text-[#1a1c1c] border border-[#d1c5b4] rounded-full transition-all hover:border-[#4e4639]">
+                    Cancel
+                </a>
+                <button type="submit"
+                        class="px-6 py-2.5 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded-full shadow-md hover:shadow-lg transition-all duration-300">
+                    Yes, Delete
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -16,7 +16,7 @@ namespace weddingapporg.Models
         [Required(ErrorMessage = "Service Name is required")]
         [StringLength(200)]
         [Display(Name = "Service Name")]
-        public string Service_Name { get; set; }
+        public string? Service_Name { get; set; }
 
         [Required(ErrorMessage = "Price is required")]
         [Range(0, 1000000)]
@@ -30,23 +30,23 @@ namespace weddingapporg.Models
         [Required(ErrorMessage = "City is required")]
         [StringLength(100)]
         [Display(Name = "City")]
-        public string City { get; set; }
+        public string? City { get; set; }
 
         [StringLength(500)]
         [Display(Name = "Address")]
-        public string Address { get; set; }
+        public string? Address { get; set; }
 
         // رابط الصورة الرئيسية
         [StringLength(500)]
         [Display(Name = "Main Image")]
-        public string MainImage { get; set; }
+        public string? MainImage { get; set; }
 
         // وصف الخدمة
         [StringLength(2000)]
         [Display(Name = "Description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         // معرف المنظم (مؤقتاً)
         public string? OrganizerId { get; set; } = "temp-organizer";
     }
-}
+}
