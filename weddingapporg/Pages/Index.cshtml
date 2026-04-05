@@ -2,37 +2,37 @@
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
-}
-<div class="text-center">
-    
-    @* عرض رسالة النجاح إذا كانت موجودة *@
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="fas fa-check-circle me-2"></i> @TempData["SuccessMessage"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
 
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show text-center" role="alert" style="position: fixed; top: 80px; left: 50%; transform: translateX(-50%); z-index: 9999; min-width: 300px; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 8px; padding: 15px 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+        <i class="fas fa-check-circle me-2"></i> @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float: right; background: none; border: none; font-size: 20px; cursor: pointer;">&times;</button>
+    </div>
+}
+
+<!-- Hero Section -->
 <section class="relative h-[921px] flex items-center justify-center overflow-hidden px-8">
     <div class="absolute inset-0 z-0">
         <div class="absolute inset-0 bg-on-surface/20 z-10"></div>
-        <img class="w-full h-full object-cover" data-alt="Luxurious wedding banquet hall with high ceilings, crystal chandeliers, and long tables decorated with white floral arrangements and candles." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoG-bNfn5ZJQFvKhhD9e3ehee36HkcSvhtqm22pBTpNKi4WY7DftypomTEsigl4w6tBEFWSrcjhkKEKrbXlsI6AdaJGKRG_FfH_3W6qY8Lx4hxgFhHBjXuhyc7fVwFBHQhRxYocHZbf371Hr0dFEP4qORyFrAsTGS691jkB7i0fzYtQ_YnuUBNSvEQH9k0x9x9hedsD6pHY86Og1hqASuODwtwsrOCAnnaUJA-2ihx6ktzANGBplPkcLoI5qVE1d9InHVB7n4u8OA"/>
+        <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoG-bNfn5ZJQFvKhhD9e3ehee36HkcSvhtqm22pBTpNKi4WY7DftypomTEsigl4w6tBEFWSrcjhkKEKrbXlsI6AdaJGKRG_FfH_3W6qY8Lx4hxgFhHBjXuhyc7fVwFBHQhRxYocHZbf371Hr0dFEP4qORyFrAsTGS691jkB7i0fzYtQ_YnuUBNSvEQH9k0x9x9hedsD6pHY86Og1hqASuODwtwsrOCAnnaUJA-2ihx6ktzANGBplPkcLoI5qVE1d9InHVB7n4u8OA" />
     </div>
     <div class="relative z-20 text-center max-w-4xl">
         <p class="font-label text-white text-xs tracking-[0.3em] uppercase mb-6 opacity-90">Curating Unforgettable Moments</p>
         <h1 class="font-headline text-5xl md:text-7xl lg:text-8xl text-white mb-12 tracking-tight">
-            Where <span class="serif-italic">Elegance</span><br/>Meets Celebration
+            Where <span class="serif-italic">Elegance</span><br />Meets Celebration
         </h1>
         <!-- Search Bar -->
         <div class="bg-surface-container-lowest/90 backdrop-blur-md p-2 md:p-3 rounded-lg shadow-2xl flex flex-col md:flex-row gap-2 max-w-3xl mx-auto">
             <div class="flex-1 flex items-center px-4 border-r border-outline-variant/20">
                 <span class="material-symbols-outlined text-primary mr-3">location_on</span>
-                <input class="w-full bg-transparent border-none focus:ring-0 font-body text-on-surface placeholder:text-on-surface-variant/50" placeholder="Search destinations..." type="text"/>
+                <input class="w-full bg-transparent border-none focus:ring-0 font-body text-on-surface placeholder:text-on-surface-variant/50" placeholder="Search destinations..." type="text" />
             </div>
             <div class="flex-1 flex items-center px-4 border-r border-outline-variant/20">
                 <span class="material-symbols-outlined text-primary mr-3">calendar_month</span>
-                <input class="w-full bg-transparent border-none focus:ring-0 font-body text-on-surface placeholder:text-on-surface-variant/50" placeholder="Wedding Date" type="text"/>
+                <input class="w-full bg-transparent border-none focus:ring-0 font-body text-on-surface placeholder:text-on-surface-variant/50" placeholder="Wedding Date" type="text" />
             </div>
             <button class="bg-primary text-on-primary px-8 py-4 rounded-lg font-label text-sm tracking-widest uppercase hover:bg-primary-container transition-colors shrink-0">
                 Find Venues
@@ -54,7 +54,7 @@
         <!-- Large Feature -->
         <div class="md:col-span-7 group cursor-pointer">
             <div class="relative overflow-hidden rounded-lg aspect-[4/3] mb-6">
-                <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Opulent French chateau wedding reception with floor-to-ceiling windows and lush greenery hanging from gold trusses" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRDy88Ky-YPvvPBfxy5sHAYIERYE0BqAal46k56V29jIGOxTwC-Tf-IE08r4MKgXLtA59FVpdXOn4O0shkaap-1PiFSFGXGuoc2T0qBWrcXUYr65XKNax4ZIgNaahghOwaFxM6r_l-IOvtQQ_h_x21xwSStxi4Z19q1MzpHhV-9tejzObbHeggSUjw6tuuFWcLzNJXaCGBAafIMSUR31s_dFYq5jAS64mUNaunj1JElB9Jz9Deo4BP8sKvCgEh4_FyfPCZUaINRQc"/>
+                <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRDy88Ky-YPvvPBfxy5sHAYIERYE0BqAal46k56V29jIGOxTwC-Tf-IE08r4MKgXLtA59FVpdXOn4O0shkaap-1PiFSFGXGuoc2T0qBWrcXUYr65XKNax4ZIgNaahghOwaFxM6r_l-IOvtQQ_h_x21xwSStxi4Z19q1MzpHhV-9tejzObbHeggSUjw6tuuFWcLzNJXaCGBAafIMSUR31s_dFYq5jAS64mUNaunj1JElB9Jz9Deo4BP8sKvCgEh4_FyfPCZUaINRQc" />
                 <div class="absolute top-6 left-6 bg-surface-container-lowest/90 px-4 py-1 text-[10px] font-label tracking-widest uppercase">Paris, France</div>
             </div>
             <h3 class="font-headline text-2xl mb-2">The Grand Pavilion</h3>
@@ -67,14 +67,14 @@
         <div class="md:col-span-5 flex flex-col gap-12">
             <div class="group cursor-pointer">
                 <div class="relative overflow-hidden rounded-lg aspect-video mb-4">
-                    <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Minimalist modern wedding venue with white walls, arched windows, and soft natural sunlight casting long shadows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjniUzxbN8gJMPJ-2_8g1fbSlR4eG0U7j1mrN83wB0RwM4JFYujxibfzuKPAlwF8jzZT94ym32I8JV88CJN83wOXaiN11Oz4ZKZwGreInVRhiG3w9tu5vo9KbNxd15ATHK8JlFlztngeG7v59EVxMcZXkqfCN3KEolzAi_mO-QysWUW9RGMo4OD5x5ERTIgRbqC9j0nVXTIUuk1YxiG3BLFnUUGbhg_QKVBOGOBxgoJnNN0iHY0gGVC_5c4RrS2UdXKAeQf29hexk"/>
+                    <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjniUzxbN8gJMPJ-2_8g1fbSlR4eG0U7j1mrN83wB0RwM4JFYujxibfzuKPAlwF8jzZT94ym32I8JV88CJN83wOXaiN11Oz4ZKZwGreInVRhiG3w9tu5vo9KbNxd15ATHK8JlFlztngeG7v59EVxMcZXkqfCN3KEolzAi_mO-QysWUW9RGMo4OD5x5ERTIgRbqC9j0nVXTIUuk1YxiG3BLFnUUGbhg_QKVBOGOBxgoJnNN0iHY0gGVC_5c4RrS2UdXKAeQf29hexk" />
                 </div>
                 <h3 class="font-headline text-xl mb-1">L'Orangerie Sanctuary</h3>
                 <p class="font-label text-xs text-on-surface-variant tracking-widest uppercase">Tuscany, Italy</p>
             </div>
             <div class="group cursor-pointer">
                 <div class="relative overflow-hidden rounded-lg aspect-video mb-4">
-                    <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Coastal cliffside wedding venue at dusk with thousands of fairy lights and ocean views in the background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCj_8QbwveEt7I2BgCkE_2S_L6Dh4zXKCLxWy3PvANpDm1cVXJ4FNoxFfkawzmpO0SqBUAxmQIyuPBnJe7VuFNETmdHr4odsGkfhxstxl0fwLD8O9A9eRBKaDxibn-UaLqWfKBt3K5K3k5C90gZDPi6IMlW-JKg6nwBRp8_KyMiFvGNRDq6J3xD6ErjJOxFBRi_iBUJhZ92Sdv3bNozaza2eUiIUxB9jNlSbD41oBkqqPl3b9DNxTd6ikBsrhLVBSUXzIjt0JkwcB8"/>
+                    <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCj_8QbwveEt7I2BgCkE_2S_L6Dh4zXKCLxWy3PvANpDm1cVXJ4FNoxFfkawzmpO0SqBUAxmQIyuPBnJe7VuFNETmdHr4odsGkfhxstxl0fwLD8O9A9eRBKaDxibn-UaLqWfKBt3K5K3k5C90gZDPi6IMlW-JKg6nwBRp8_KyMiFvGNRDq6J3xD6ErjJOxFBRi_iBUJhZ92Sdv3bNozaza2eUiIUxB9jNlSbD41oBkqqPl3b9DNxTd6ikBsrhLVBSUXzIjt0JkwcB8" />
                 </div>
                 <h3 class="font-headline text-xl mb-1">Cote d'Azur Terrace</h3>
                 <p class="font-label text-xs text-on-surface-variant tracking-widest uppercase">Nice, France</p>
@@ -90,9 +90,9 @@
         <div class="flex flex-col lg:flex-row items-center gap-20 mb-40">
             <div class="w-full lg:w-1/2 relative">
                 <div class="absolute -top-10 -left-10 w-40 h-40 bg-primary/5 rounded-full blur-3xl"></div>
-                <img class="relative z-10 w-full rounded-lg shadow-xl translate-x-4 lg:translate-x-0" data-alt="Artistic plating of a gourmet wedding course featuring edible flowers and delicate garnishes on fine ceramic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8Qal5H_UIKSJu3JwFJv4GY35seBsYKdt4r5i5oPXCrq6Uy2IVblgtYhpz19-c-xwG6D6anyQLcGn3udALjJPI4ew_scsbqU1znp-6RW6GEdOCu6DnKjNRI7tgpm38EgQhKAI2--Y6sz9SPOVI4oLILRDJip8EGYoKweJqQ1HIMBYnu9jdSKSFBpXMPBfnFgr9GNboNnzHKgdvA1p7w6QbYVkS5KbQ-HEdMqikf2o9EfCLWfHivAMZAE3-AOUluejPnTiJurfan8U"/>
+                <img class="relative z-10 w-full rounded-lg shadow-xl translate-x-4 lg:translate-x-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8Qal5H_UIKSJu3JwFJv4GY35seBsYKdt4r5i5oPXCrq6Uy2IVblgtYhpz19-c-xwG6D6anyQLcGn3udALjJPI4ew_scsbqU1znp-6RW6GEdOCu6DnKjNRI7tgpm38EgQhKAI2--Y6sz9SPOVI4oLILRDJip8EGYoKweJqQ1HIMBYnu9jdSKSFBpXMPBfnFgr9GNboNnzHKgdvA1p7w6QbYVkS5KbQ-HEdMqikf2o9EfCLWfHivAMZAE3-AOUluejPnTiJurfan8U" />
                 <div class="absolute -bottom-12 -right-12 w-2/3 hidden lg:block">
-                    <img class="rounded-lg shadow-2xl border-4 border-surface" data-alt="Close-up of crystal champagne flutes being filled at a high-end wedding reception bar." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOH70ZUfzTB6Z5DGA9nk-T2oy_R6wVAjhM_z08mJqTaanifnWASFERRjZuW7GXReIG2VdqYiSUUoS3o2ZA295TJkx0iQUqCgnYFclrirMFdJ6tiwtH57Uv7z9cesZPaTyUw_LhW99XfLS7NCHjPfw_zJs8_sWiKD0uVaaYUC2exr0JYqJW14a2pApDtHsDwgAU_NCEsi0dRfmsZBMSRfK3V_xzu0taxYt7NS-BzC5U63L2Ac5wJYRj6se-cVy5wCNPrjih-rUz9Zc"/>
+                    <img class="rounded-lg shadow-2xl border-4 border-surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOH70ZUfzTB6Z5DGA9nk-T2oy_R6wVAjhM_z08mJqTaanifnWASFERRjZuW7GXReIG2VdqYiSUUoS3o2ZA295TJkx0iQUqCgnYFclrirMFdJ6tiwtH57Uv7z9cesZPaTyUw_LhW99XfLS7NCHjPfw_zJs8_sWiKD0uVaaYUC2exr0JYqJW14a2pApDtHsDwgAU_NCEsi0dRfmsZBMSRfK3V_xzu0taxYt7NS-BzC5U63L2Ac5wJYRj6se-cVy5wCNPrjih-rUz9Zc" />
                 </div>
             </div>
             <div class="w-full lg:w-1/2">
@@ -122,9 +122,9 @@
         <!-- Decoration Section -->
         <div class="flex flex-col lg:flex-row-reverse items-center gap-20">
             <div class="w-full lg:w-1/2 relative">
-                <img class="relative z-10 w-full rounded-lg shadow-xl" data-alt="Stunning floral installation with cascading white orchids and roses hanging above a mirrored wedding aisle." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAswnccLgtu9fbRce_T4yX_wx4l0iLrNEaFFpufpcoaaXxLMf-OAI3n-htTsv7G4rZnFOINvYTUaHVJ3dgxysfp0TkQAMG66UJGSSdmz5siSiJDTbgwG8lAFSS0oyHHUJcGEwVzIi8gxF-Wg_2aL5rATPYDWfk_ZKV0l9lkolsF0XuSq87JQU7x60T4n4xc-XWhJMXsz-VVfYmcSFpEPlUgYYbnXpp9m69J6G0EIGCHd3wteZihssFRpRBp3Oub2xPSjSOQx6Se50"/>
+                <img class="relative z-10 w-full rounded-lg shadow-xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAswnccLgtu9fbRce_T4yX_wx4l0iLrNEaFFpufpcoaaXxLMf-OAI3n-htTsv7G4rZnFOINvYTUaHVJ3dgxysfp0TkQAMG66UJGSSdmz5siSiJDTbgwG8lAFSS0oyHHUJcGEwVzIi8gxF-Wg_2aL5rATPYDWfk_ZKV0l9lkolsF0XuSq87JQU7x60T4n4xc-XWhJMXsz-VVfYmcSFpEPlUgYYbnXpp9m69J6G0EIGCHd3wteZihssFRpRBp3Oub2xPSjSOQx6Se50" />
                 <div class="absolute -top-12 -left-12 w-1/2 hidden lg:block">
-                    <img class="rounded-lg shadow-2xl border-4 border-surface" data-alt="Detailed shot of elegant gold-rimmed place settings with hand-lettered calligraphy name cards." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDYIT-aWPe52TMAm-HMfVa2TKQZIZrsOz4GGOGmuyLMZu3-jCOBbgLhokXVA-mG4gcFc9XZEXpUze28fBbXQh1g15MRdinlzz0YWZ0dhrcbuPBlebJ9dDWJ0n15a5LJfaJUIIhO9WDVh3aJDBfpa_myNmki1mjR5ewKHuGoFkMxFrm8T6WpsiOELui4-uViecMmRJS0mKUn8k9fW8EydELL4EC0rA-n9I9VZsl1nHZK6wryffHkS2d1l8Q8j-6x8tdgVnDInnrgIQ"/>
+                    <img class="rounded-lg shadow-2xl border-4 border-surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDYIT-aWPe52TMAm-HMfVa2TKQZIZrsOz4GGOGmuyLMZu3-jCOBbgLhokXVA-mG4gcFc9XZEXpUze28fBbXQh1g15MRdinlzz0YWZ0dhrcbuPBlebJ9dDWJ0n15a5LJfaJUIIhO9WDVh3aJDBfpa_myNmki1mjR5ewKHuGoFkMxFrm8T6WpsiOELui4-uViecMmRJS0mKUn8k9fW8EydELL4EC0rA-n9I9VZsl1nHZK6wryffHkS2d1l8Q8j-6x8tdgVnDInnrgIQ" />
                 </div>
             </div>
             <div class="w-full lg:w-1/2">

@@ -173,8 +173,7 @@ namespace weddingapporg.Areas.Identity.Pages.Account
                     return Page();
                 }
             }
-
-           
+            
             await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
             await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
             user.FName = Input.FName;
@@ -189,15 +188,10 @@ namespace weddingapporg.Areas.Identity.Pages.Account
             if (result.Succeeded)
             {
                 _logger.LogInformation("User created a new account with password.");
-
-               
                 await _signInManager.SignInAsync(user, isPersistent: false);
-
-              
-                return LocalRedirect(returnUrl);
+                return RedirectToPage("/Index");  
             }
 
-           
             foreach (var error in result.Errors)
             {
                 ModelState.AddModelError(string.Empty, error.Description);
