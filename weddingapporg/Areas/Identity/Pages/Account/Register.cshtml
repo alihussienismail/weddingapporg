@@ -1,0 +1,271 @@
+@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Begin Your Journey | The Editorial Wedding</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;family=Manrope:wght@300;400;500;600&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+        darkMode: "class",
+        theme: {
+        extend: {
+        colors: {
+        "on-surface-variant": "#4e4639",
+        "primary-fixed": "#ffdea5",
+        "on-primary-fixed": "#261900",
+        "on-secondary-fixed": "#1b1c1c",
+        "on-error-container": "#93000a",
+        "surface-tint": "#775a19",
+        "primary": "#775a19",
+        "secondary-fixed": "#e4e2e1",
+        "tertiary-fixed-dim": "#c9c6c1",
+        "primary-container": "#c5a059",
+        "surface-container-low": "#f4f3f2",
+        "surface-dim": "#dadad9",
+        "tertiary-fixed": "#e5e2dc",
+        "error-container": "#ffdad6",
+        "surface-bright": "#faf9f8",
+        "on-error": "#ffffff",
+        "secondary-container": "#e4e2e1",
+        "primary-fixed-dim": "#e9c176",
+        "on-primary-fixed-variant": "#5d4201",
+        "on-secondary": "#ffffff",
+        "tertiary-container": "#a7a5a0",
+        "surface-container-high": "#e9e8e7",
+        "on-primary-container": "#4e3700",
+        "on-tertiary-container": "#3b3b37",
+        "on-secondary-container": "#656464",
+        "inverse-primary": "#e9c176",
+        "tertiary": "#5f5e5a",
+        "error": "#ba1a1a",
+        "on-surface": "#1a1c1c",
+        "surface-container": "#eeeeed",
+        "outline": "#7f7667",
+        "secondary": "#5f5e5e",
+        "on-tertiary-fixed": "#1c1c18",
+        "on-tertiary": "#ffffff",
+        "on-primary": "#ffffff",
+        "background": "#faf9f8",
+        "on-secondary-fixed-variant": "#474747",
+        "surface": "#faf9f8",
+        "surface-container-lowest": "#ffffff",
+        "inverse-surface": "#2f3130",
+        "inverse-on-surface": "#f1f0f0",
+        "on-background": "#1a1c1c",
+        "outline-variant": "#d1c5b4",
+        "on-tertiary-fixed-variant": "#474743",
+        "surface-container-highest": "#e3e2e1",
+        "secondary-fixed-dim": "#c8c6c5",
+        "surface-variant": "#e3e2e1"
+        },
+        fontFamily: {
+        "headline": ["Noto Serif"],
+        "body": ["Manrope"],
+        "label": ["Manrope"]
+        },
+        borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+        },
+        },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .serif-italic { font-family: 'Noto Serif'; font-style: italic; }
+        .manrope-caps { font-family: 'Manrope'; text-transform: uppercase; letter-spacing: 0.1em; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
+    <main class="min-h-screen flex flex-col md:flex-row">
+        <section class="hidden md:flex md:w-5/12 lg:w-1/2 relative overflow-hidden bg-stone-200">
+            <div class="absolute inset-0 z-10 bg-gradient-to-b from-transparent to-on-surface/40"></div>
+            <img alt="elegant wedding ceremony setting with soft natural light and artisanal floral arrangements" class="absolute inset-0 w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2aruMjKFqYnwA4vIxwXO97BLp0kzyM1tNIaaq4RMpIeJBQbQrTUExfcbPnlWc8H8glYmZjLKyPCr5kzHcf7X-f6iUGjQlXcHFxn0NEZmS2W4EnzwUzssOJ75jbk23Zg9-k2B2JSqF2tzHtaGo8r4W-ilwMVs2cI157AuZ7KuR4SZlWJC4jKdeACFNLPjUsoHmxyopi4IBtKRBMJgzEqUO8Z7x1mwSwYWtOysA1lt-NvgypXMBycBvV1qEx978J4afyXD3n0f_gVI" />
+            <div class="relative z-20 flex flex-col justify-end p-16 h-full text-surface-bright">
+                <p class="manrope-caps text-xs mb-4 opacity-80">The Digital Concierge</p>
+                <h1 class="font-headline text-5xl lg:text-6xl mb-6 tracking-tight">
+                    Crafting <span class="serif-italic">your</span> legacy.
+                </h1>
+                <p class="max-w-md text-lg font-light leading-relaxed opacity-90">
+                    Step into a world where every detail is curated with intention. Your journey to an unforgettable celebration begins here.
+                </p>
+            </div>
+        </section>
+    
+        <section class="flex-1 flex flex-col items-center justify-center p-8 md:p-16 lg:p-24 bg-surface">
+            <div class="w-full max-w-[440px] space-y-12">
+                <header class="text-center md:text-left">
+                    <div class="inline-block mb-8">
+                        <span class="font-headline italic text-3xl text-on-surface">The Editorial Wedding</span>
+                    </div>
+                    <h2 class="font-headline text-3xl md:text-4xl text-on-surface mb-3">Begin your experience</h2>
+                    <p class="text-on-surface-variant font-light">Enter your details to access the planning atelier.</p>
+                </header>
+            
+           
+                <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" enctype="multipart/form-data" class="space-y-8">
+                    <div asp-validation-summary="ModelOnly" class="text-danger text-sm mb-4" role="alert"></div>
+                
+             
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="manrope-caps text-[0.65rem] font-semibold text-on-surface-variant">First Name</label>
+                            <input asp-for="Input.FName" class="w-full bg-surface-container-lowest border-none ring-1 ring-outline-variant/20 focus:ring-primary py-4 px-4 text-sm transition-all outline-none" placeholder="Fname" type="text" />
+                            <span asp-validation-for="Input.FName" class="text-danger text-xs"></span>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="manrope-caps text-[0.65rem] font-semibold text-on-surface-variant">Last Name</label>
+                            <input asp-for="Input.LName" class="w-full bg-surface-container-lowest border-none ring-1 ring-outline-variant/20 focus:ring-primary py-4 px-4 text-sm transition-all outline-none" placeholder="Lname" type="text" />
+                            <span asp-validation-for="Input.LName" class="text-danger text-xs"></span>
+                        </div>
+                    </div>
+                
+                    <!-- Email -->
+                    <div class="space-y-2">
+                        <label class="manrope-caps text-[0.65rem] font-semibold text-on-surface-variant">Email Address</label>
+                        <input asp-for="Input.Email" class="w-full bg-surface-container-lowest border-none ring-1 ring-outline-variant/20 focus:ring-primary py-4 px-4 text-sm transition-all outline-none" placeholder="name@example.com" type="email" />
+                        <span asp-validation-for="Input.Email" class="text-danger text-xs"></span>
+                    </div>
+                
+                    <!-- Password -->
+                    <div class="space-y-2">
+                        <label class="manrope-caps text-[0.65rem] font-semibold text-on-surface-variant">Create Password</label>
+                        <div class="relative">
+                            <input asp-for="Input.Password" class="w-full bg-surface-container-lowest border-none ring-1 ring-outline-variant/20 focus:ring-primary py-4 px-4 text-sm transition-all outline-none pr-12" placeholder="••••••••" type="password" />
+                            <button class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant/60 hover:text-primary transition-colors" type="button" onclick="togglePasswordVisibility(this)">
+                                <span class="material-symbols-outlined text-xl">visibility</span>
+                            </button>
+                        </div>
+                        <span asp-validation-for="Input.Password" class="text-danger text-xs"></span>
+                    </div>
+                
+                    <!-- Confirm Password -->
+                    <div class="space-y-2">
+                        <label class="manrope-caps text-[0.65rem] font-semibold text-on-surface-variant">Confirm Password</label>
+                        <input asp-for="Input.ConfirmPassword" class="w-full bg-surface-container-lowest border-none ring-1 ring-outline-variant/20 focus:ring-primary py-4 px-4 text-sm transition-all outline-none" placeholder="••••••••" type="password" />
+                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger text-xs"></span>
+                    </div>
+                    <!-- Phone Number -->
+                    <div class="space-y-2">
+                        <label class="manrope-caps text-[0.65rem] font-semibold text-on-surface-variant">Phone Number</label>
+                        <input asp-for="Input.PhoneNumber" class="w-full bg-surface-container-lowest border-none ring-1 ring-outline-variant/20 focus:ring-primary py-4 px-4 text-sm transition-all outline-none" placeholder="+1 234 567 8900" type="tel" />
+                        <span asp-validation-for="Input.PhoneNumber" class="text-danger text-xs"></span>
+                    </div>
+                
+                    <!-- Address -->
+                    <div class="space-y-2">
+                        <label class="manrope-caps text-[0.65rem] font-semibold text-on-surface-variant">Address</label>
+                        <input asp-for="Input.Address" class="w-full bg-surface-container-lowest border-none ring-1 ring-outline-variant/20 focus:ring-primary py-4 px-4 text-sm transition-all outline-none" placeholder="Your address" type="text" />
+                        <span asp-validation-for="Input.Address" class="text-danger text-xs"></span>
+                    </div>
+                
+                    <!-- Date of Birth -->
+                    <div class="space-y-2">
+                        <label class="manrope-caps text-[0.65rem] font-semibold text-on-surface-variant">Date of Birth</label>
+                        <input asp-for="Input.DateOfBirth" class="w-full bg-surface-container-lowest border-none ring-1 ring-outline-variant/20 focus:ring-primary py-4 px-4 text-sm transition-all outline-none" type="date" />
+                        <span asp-validation-for="Input.DateOfBirth" class="text-danger text-xs"></span>
+                    </div>
+                
+                    <!-- Gender -->
+                    <div class="space-y-2">
+                        <label class="manrope-caps text-[0.65rem] font-semibold text-on-surface-variant">Gender</label>
+                        <div class="flex gap-6">
+                            <label class="flex items-center gap-2">
+                                <input type="radio" asp-for="Input.Gender" value="false" class="w-4 h-4 text-primary" />
+                                <span class="text-sm text-on-surface-variant">Male</span>
+                            </label>
+                            <label class="flex items-center gap-2">
+                                <input type="radio" asp-for="Input.Gender" value="true" class="w-4 h-4 text-primary" />
+                                <span class="text-sm text-on-surface-variant">Female</span>
+                            </label>
+                        </div>
+                        <span asp-validation-for="Input.Gender" class="text-danger text-xs"></span>
+                    </div>
+                
+                    <!-- Profile Picture -->
+                    <div class="space-y-2">
+                        <label class="manrope-caps text-[0.65rem] font-semibold text-on-surface-variant">Profile Picture</label>
+                        <input asp-for="Input.ProfileImage" class="w-full bg-surface-container-lowest border-none ring-1 ring-outline-variant/20 focus:ring-primary py-3 px-4 text-sm transition-all outline-none" type="file" accept="image/*" />
+                        <span asp-validation-for="Input.ProfileImage" class="text-danger text-xs"></span>
+                    </div>
+                
+               
+                
+                    <!-- Terms and Conditions -->
+                    <div class="flex items-start gap-3 py-2">
+                        <input class="mt-1 rounded-none border-outline-variant text-primary focus:ring-primary-container bg-surface-container-lowest" id="terms" type="checkbox" required />
+                        <label class="text-xs text-on-surface-variant leading-relaxed font-light" for="terms">
+                            I agree to the <a class="text-on-surface font-medium border-b border-primary/30 hover:border-primary transition-all" href="#">Terms of Service</a> and <a class="text-on-surface font-medium border-b border-primary/30 hover:border-primary transition-all" href="#">Privacy Policy</a> regarding my personal data.
+                        </label>
+                    </div>
+                
+                    <!-- Register Button -->
+                    <div class="pt-4">
+                        <button id="registerSubmit" type="submit" class="w-full bg-gradient-to-r from-primary to-primary-container text-on-primary py-5 manrope-caps text-xs font-bold tracking-widest shadow-lg shadow-primary/10 hover:opacity-90 active:scale-[0.98] transition-all">
+                            Create Account
+                        </button>
+                    </div>
+                </form>
+            
+                <footer class="pt-8 text-center space-y-6">
+                    <p class="text-sm text-on-surface-variant font-light">
+                        Already have an account?
+                        <a asp-page="./Login" class="text-primary font-semibold ml-1 hover:underline">Log in here</a>
+                    </p>
+                    <div class="flex items-center justify-center gap-4 text-on-surface-variant/20">
+                        <div class="h-px w-8 bg-current"></div>
+                        <span class="text-[0.6rem] manrope-caps text-on-surface-variant">Trusted by leading ateliers</span>
+                        <div class="h-px w-8 bg-current"></div>
+                    </div>
+                    <div class="flex justify-center gap-8 opacity-40">
+                        <span class="material-symbols-outlined text-3xl">fluid_med</span>
+                        <span class="material-symbols-outlined text-3xl">temp_preferences_custom</span>
+                        <span class="material-symbols-outlined text-3xl">model_training</span>
+                    </div>
+                </footer>
+            </div>
+        </section>
+    </main>
+
+    <footer class="w-full border-t border-stone-200/50 flex flex-col md:flex-row justify-between items-center px-12 py-16 bg-surface-container-low text-on-surface">
+        <div class="mb-8 md:mb-0">
+            <span class="text-lg font-headline italic">The Editorial Wedding</span>
+            <p class="manrope-caps text-[0.6rem] mt-2 text-on-surface-variant opacity-60">© 2024 Experience. All rights reserved.</p>
+        </div>
+        <nav class="flex flex-wrap justify-center gap-8">
+            <a class="manrope-caps text-[0.65rem] text-on-surface-variant/60 hover:text-primary transition-colors" href="#">Contact Us</a>
+            <a class="manrope-caps text-[0.65rem] text-on-surface-variant/60 hover:text-primary transition-colors" href="#">Privacy Policy</a>
+            <a class="manrope-caps text-[0.65rem] text-on-surface-variant/60 hover:text-primary transition-colors" href="#">Terms of Service</a>
+            <a class="manrope-caps text-[0.65rem] text-on-surface-variant/60 hover:text-primary transition-colors" href="#">Instagram</a>
+            <a class="manrope-caps text-[0.65rem] text-on-surface-variant/60 hover:text-primary transition-colors" href="#">Pinterest</a>
+        </nav>
+    </footer>
+
+    <script>
+        function togglePasswordVisibility(button) {
+        const input = button.previousElementSibling;
+        const icon = button.querySelector('.material-symbols-outlined');
+        if (input.type === 'password') {
+        input.type = 'text';
+        icon.textContent = 'visibility_off';
+        } else {
+        input.type = 'password';
+        icon.textContent = 'visibility';
+        }
+        }
+    </script>
+
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }
+</body>
+</html>

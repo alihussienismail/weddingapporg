@@ -16,7 +16,8 @@
 
     <!-- Form Card -->
     <div class="bg-white rounded-2xl shadow-sm border border-[#e3e2e1] p-8">
-        <form asp-action="Edit" method="post">
+        <!-- إضافة enctype="multipart/form-data" -->
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm"></div>
 
             <input type="hidden" asp-for="Id" />
@@ -78,11 +79,30 @@
                     <span asp-validation-for="Address" class="text-red-500 text-xs mt-1 block"></span>
                 </div>
 
-                <!-- Main Image URL -->
-                <div class="md:col-span-2">
-                    <label asp-for="MainImage" class="block text-xs font-semibold text-[#4e4639] uppercase tracking-widest mb-2"></label>
-                    <input asp-for="MainImage" class="w-full border border-[#d1c5b4] rounded-xl px-4 py-3 text-sm text-[#1a1c1c] focus:outline-none focus:ring-2 focus:ring-[#775a19]/40 focus:border-[#775a19] transition-all" />
-                    <span asp-validation-for="MainImage" class="text-red-500 text-xs mt-1 block"></span>
+                <!-- Main Image -->
+                <div>
+                    <label class="block text-xs font-semibold text-[#4e4639] uppercase tracking-widest mb-2">Main Image</label>
+                    
+                    <!-- عرض الصورة الحالية -->
+                    @if (!string.IsNullOrEmpty(Model.MainImage))
+                    {
+                        <div id="currentImageContainer" class="mb-3">
+                            <img src="@Model.MainImage" alt="Current Image"
+                                 class="w-32 h-32 object-cover rounded-lg border border-[#d1c5b4]" />
+                            <p class="text-xs text-gray-500 mt-1">Current Image</p>
+                        </div>
+                    }
+
+                    <!-- حقل رفع الصورة (اسمه imageFile وليس MainImage) -->
+                    <input type="file" id="imageInput" name="imageFile"
+                           class="w-full border border-[#d1c5b4] rounded-xl px-4 py-3 text-sm text-[#1a1c1c] focus:outline-none focus:ring-2 focus:ring-[#775a19]/40 focus:border-[#775a19] transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#775a19] file:text-white hover:file:bg-[#5a4312]"
+                           accept="image/*" />
+                    
+                    <!-- معاينة الصورة الجديدة -->
+                    <div id="newPreviewContainer" class="mt-3" style="display: none;">
+                        <img id="newImagePreview" class="w-32 h-32 object-cover rounded-lg border-2 border-[#775a19]" />
+                        <p class="text-xs text-gray-500 mt-1">New Image Preview</p>
+                    </div>
                 </div>
 
                 <!-- Description -->
@@ -98,7 +118,7 @@
             <!-- Actions -->
             <div class="flex items-center justify-end gap-4 mt-8 pt-6 border-t border-[#e3e2e1]">
                 <a asp-action="Index"
-                   class="px-6 py-2.5 text-sm font-semibold text-[#4e4639] hover:text-[#1a1c1c] border border-[#d1c5b4] rounded-full transition-all hover:border-[#4e4639]">
+                       class="px-6 py-2.5 text-sm font-semibold text-[#4e4639] hover:text-[#1a1c1c] border border-[#d1c5b4] rounded-full transition-all hover:border-[#4e4639]">
                     Cancel
                 </a>
                 <button type="submit"
@@ -111,5 +131,39 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    
+    <script>
+        // معاينة الصورة عند الاختيار
+        document.getElementById('imageInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const newPreviewContainer = document.getElementById('newPreviewContainer');
+            const newPreviewImage = document.getElementById('newImagePreview');
+            const currentImageContainer = document.getElementById('currentImageContainer');
+            
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    newPreviewImage.src = e.target.result;
+                    newPreviewContainer.style.display = 'block';
+                    if (currentImageContainer) {
+                        currentImageContainer.style.display = 'none';
+                    }
+                }
+                reader.readAsDataURL(file);
+            } else {
+                newPreviewContainer.style.display = 'none';
+                newPreviewImage.src = '';
+                if (currentImageContainer) {
+                    currentImageContainer.style.display = 'block';
+                }
+                if (file) {
+                    alert('Please select an image file (jpg, png, gif, etc.)');
+                }
+            }
+        });
+    </script>
+
 }

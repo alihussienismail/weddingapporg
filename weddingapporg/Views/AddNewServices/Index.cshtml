@@ -12,7 +12,7 @@
             <p class="text-sm text-[#4e4639] mt-1 opacity-70">Manage all available services for your wedding platform</p>
         </div>
         <a asp-action="Create"
-           class="inline-flex items-center gap-2 bg-[#775a19] hover:bg-[#5d4201] text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-all duration-300 shadow-md hover:shadow-lg">
+               class="inline-flex items-center gap-2 bg-[#775a19] hover:bg-[#5d4201] text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-all duration-300 shadow-md hover:shadow-lg">
             <span class="material-symbols-outlined text-lg">add</span>
             Add New Service
         </a>
@@ -48,17 +48,12 @@
                             <tr class="hover:bg-[#faf9f8] transition-colors duration-150">
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-3">
+                                       
                                         @if (!string.IsNullOrEmpty(item.MainImage))
                                         {
-                                            <img src="@item.MainImage" alt="@item.Service_Name"
-                                                 class="w-10 h-10 rounded-lg object-cover border border-[#e3e2e1]" />
+                                            <img src="@item.MainImage" alt="@item.Service_Name" style="width: 50px; height: 50px;" />
                                         }
-                                        else
-                                        {
-                                            <div class="w-10 h-10 rounded-lg bg-[#ffdea5]/40 flex items-center justify-center">
-                                                <span class="material-symbols-outlined text-[#775a19] text-lg">photo</span>
-                                            </div>
-                                        }
+
                                         <div>
                                             <p class="font-semibold text-[#1a1c1c] text-sm">@item.Service_Name</p>
                                             <p class="text-xs text-[#4e4639]/60 mt-0.5">@item.Address</p>
@@ -72,22 +67,22 @@
                                 </td>
                                 <td class="px-6 py-4 text-sm text-[#1a1c1c]/80">@item.City</td>
                                 <td class="px-6 py-4 text-sm font-semibold text-[#775a19]">@item.Price.ToString("C")</td>
-                                <td class="px-6 py-4 text-sm text-[#1a1c1c]/80">@(item.Capacity.HasValue ? item.Capacity.ToString() : "—")</td>
+                                <td class="px-6 py-4 text-sm text-[#1a1c1c]/80">@(item.Capacity.HasValue? item.Capacity.ToString() : "—")</td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center justify-end gap-2">
                                         <a asp-action="Details" asp-route-id="@item.Id"
-                                           class="p-2 rounded-lg text-[#4e4639] hover:bg-[#f4f3f2] hover:text-[#775a19] transition-all duration-200"
-                                           title="View Details">
+                                               class="p-2 rounded-lg text-[#4e4639] hover:bg-[#f4f3f2] hover:text-[#775a19] transition-all duration-200"
+                                               title="View Details">
                                             <span class="material-symbols-outlined text-base">visibility</span>
                                         </a>
                                         <a asp-action="Edit" asp-route-id="@item.Id"
-                                           class="p-2 rounded-lg text-[#4e4639] hover:bg-[#f4f3f2] hover:text-[#775a19] transition-all duration-200"
-                                           title="Edit">
+                                               class="p-2 rounded-lg text-[#4e4639] hover:bg-[#f4f3f2] hover:text-[#775a19] transition-all duration-200"
+                                               title="Edit">
                                             <span class="material-symbols-outlined text-base">edit</span>
                                         </a>
                                         <a asp-action="Delete" asp-route-id="@item.Id"
-                                           class="p-2 rounded-lg text-[#4e4639] hover:bg-red-50 hover:text-red-600 transition-all duration-200"
-                                           title="Delete">
+                                               class="p-2 rounded-lg text-[#4e4639] hover:bg-red-50 hover:text-red-600 transition-all duration-200"
+                                               title="Delete">
                                             <span class="material-symbols-outlined text-base">delete</span>
                                         </a>
                                     </div>

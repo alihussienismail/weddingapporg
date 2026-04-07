@@ -2,16 +2,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using weddingapporg.Data;
 using weddingapporg.Models;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace weddingapporg.Controllers.Admin
 {
     public class AddNewServicesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public AddNewServicesController(ApplicationDbContext context)
+        public AddNewServicesController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         // GET: AddNewServices
@@ -42,17 +46,37 @@ namespace weddingapporg.Controllers.Admin
             return View();
         }
 
-        // POST: AddNewServices/Create
+        // POST: AddNewServices/Create (دالة واحدة فقط - تم دمج الاثنين)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ServiceType,Service_Name,Price,Capacity,City,Address,MainImage,Description,OrganizerId")] Service service)
+        public async Task<IActionResult> Create(Service service, IFormFile? imageFile)
         {
             if (ModelState.IsValid)
             {
                 service.Id = Guid.NewGuid();
+
+                // معالجة الصورة إذا تم رفعها
+                if (imageFile != null && imageFile.Length > 0)
+                {
+                    // إنشاء مسار مجلد uploads في wwwroot
+                    string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
+                    if (!Directory.Exists(uploadsFolder))
+                        Directory.CreateDirectory(uploadsFolder);
+
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + imageFile.FileName;
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await imageFile.CopyToAsync(fileStream);
+                    }
+
+                    service.MainImage = "/uploads/" + uniqueFileName;  // حفظ المسار
+                }
+
                 _context.Add(service);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Redirect("/AddNewServices/Index");
             }
             return View(service);
         }
@@ -74,7 +98,7 @@ namespace weddingapporg.Controllers.Admin
         // POST: AddNewServices/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,ServiceType,Service_Name,Price,Capacity,City,Address,MainImage,Description,OrganizerId")] Service service)
+        public async Task<IActionResult> Edit(Guid id, Service service, IFormFile? imageFile)
         {
             if (id != service.Id)
                 return NotFound();
@@ -83,6 +107,24 @@ namespace weddingapporg.Controllers.Admin
             {
                 try
                 {
+                    // معالجة الصورة الجديدة إذا تم رفعها
+                    if (imageFile != null && imageFile.Length > 0)
+                    {
+                        string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
+                        if (!Directory.Exists(uploadsFolder))
+                            Directory.CreateDirectory(uploadsFolder);
+
+                        string uniqueFileName = Guid.NewGuid().ToString() + "_" + imageFile.FileName;
+                        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await imageFile.CopyToAsync(fileStream);
+                        }
+
+                        service.MainImage = "/uploads/" + uniqueFileName;
+                    }
+
                     _context.Update(service);
                     await _context.SaveChangesAsync();
                 }
@@ -93,7 +135,8 @@ namespace weddingapporg.Controllers.Admin
                     else
                         throw;
                 }
-                return RedirectToAction(nameof(Index));
+                // العودة إلى صفحة AddNewServices (Index)
+                return Redirect("/AddNewServices/Index");
             }
             return View(service);
         }

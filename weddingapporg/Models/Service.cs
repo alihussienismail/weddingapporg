@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Http;  // أضف هذا السطر في الأعلى
 
 namespace weddingapporg.Models
 {
@@ -36,17 +37,15 @@ namespace weddingapporg.Models
         [Display(Name = "Address")]
         public string? Address { get; set; }
 
-        // رابط الصورة الرئيسية
+        // ========== استخدم هذا الحقل لتخزين مسار الصورة ==========
         [StringLength(500)]
         [Display(Name = "Main Image")]
-        public string? MainImage { get; set; }
+        public string? MainImage { get; set; }  // هذا هو الحقل الموجود في قاعدة البيانات
+        // =====================================================
 
-        // وصف الخدمة
+
         [StringLength(2000)]
         [Display(Name = "Description")]
         public string? Description { get; set; }
-
-        // معرف المنظم (مؤقتاً)
-        public string? OrganizerId { get; set; } = "temp-organizer";
     }
-}
+}

@@ -16,18 +16,20 @@
     <!-- Detail Card -->
     <div class="bg-white rounded-2xl shadow-sm border border-[#e3e2e1] overflow-hidden">
 
-        <!-- Image Banner -->
-        @if (!string.IsNullOrEmpty(Model.MainImage))
-        {
-            <img src="@Model.MainImage" alt="@Model.Service_Name"
-                 class="w-full h-56 object-cover" />
-        }
-        else
-        {
-            <div class="w-full h-32 bg-gradient-to-r from-[#ffdea5]/40 to-[#c5a059]/20 flex items-center justify-center">
-                <span class="material-symbols-outlined text-5xl text-[#775a19]/30">photo</span>
-            </div>
-        }
+          <div class="p-6 border-b border-[#e3e2e1]">
+            @if (Model.MainImage != null && Model.MainImage.Length > 0)
+            {
+                <img src="@Url.Action("GetImage", "Service", new { id = Model.Id })" 
+                     alt="@Model.Service_Name"
+                     class="w-full max-h-96 object-cover rounded-xl" />
+            }
+            else
+            {
+                <div class="w-full h-64 bg-[#ffdea5]/40 flex items-center justify-center rounded-xl">
+                    <span class="material-symbols-outlined text-[#775a19] text-6xl">photo</span>
+                </div>
+            }
+        </div>
 
         <div class="p-8">
             <!-- Title + Badge -->
