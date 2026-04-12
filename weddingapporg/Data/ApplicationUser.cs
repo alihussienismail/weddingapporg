@@ -10,5 +10,6 @@ namespace weddingapporg.Data
         public string? ProfilePicturePath { get; set; }
         public string? Address { get; set; }
         public DateTime? DateOfBirth { get; set; }
+        public bool IsAdmin { get; set; } = false;
     }
 }
