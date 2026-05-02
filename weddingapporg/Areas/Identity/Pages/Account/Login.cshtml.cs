@@ -21,7 +21,7 @@ namespace weddingapporg.Areas.Identity.Pages.Account
     public class LoginModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly UserManager<ApplicationUser> _userManager;  
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<LoginModel> _logger;
 
         public LoginModel(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, ILogger<LoginModel> logger)
@@ -120,20 +120,21 @@ namespace weddingapporg.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User logged in.");
 
-                  
+
                     var user = await _userManager.FindByEmailAsync(Input.Email);
 
-                  
+
                     if (user != null && user.IsAdmin)
                     {
-                   
+
                         return RedirectToPage("/Admin/Index");
                     }
                     else
                     {
-                  
-                        return LocalRedirect(returnUrl);
+
+                        return RedirectToPage("/");
                     }
+
                 }
 
                 if (result.RequiresTwoFactor)

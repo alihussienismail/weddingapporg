@@ -2,43 +2,27 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
+@{
+    var user = await UserManager.GetUserAsync(User);
+}
+
 @if (SignInManager.IsSignedIn(User))
 {
-  
     <div class="flex items-center space-x-6">
-    
-        <a class="text-[#1a1c1c]/70 font-label text-sm tracking-widest uppercase hover:text-[#775a19] transition-colors"
-               asp-area="Identity"
-               asp-page="/Account/EditProfile">
-            Edit Profile
-        </a>
-        
+        @if (user != null && user.IsAdmin)
+        {
+            <a class="text-[#1a1c1c]/70 font-label text-sm tracking-widest uppercase hover:text-[#775a19] transition-colors" asp-area="" asp-page="/Admin/Index">Admin Panel</a>
+        }
+        <a class="text-[#1a1c1c]/70 font-label text-sm tracking-widest uppercase hover:text-[#775a19] transition-colors" asp-area="Identity" asp-page="/Account/EditProfile">Edit Profile</a>
         <form asp-area="Identity" asp-page="/Account/Logout" method="post">
-            <button type="submit"
-                    class="bg-gradient-to-r from-primary to-primary-container text-on-primary px-6 py-2 rounded-sm text-sm font-label tracking-widest uppercase hover:opacity-90 scale-95 active:scale-100 transition-transform">
-                Logout
-            </button>
+            <button type="submit" class="bg-gradient-to-r from-primary to-primary-container text-on-primary px-6 py-2 rounded-sm text-sm font-label tracking-widest uppercase hover:opacity-90 scale-95 active:scale-100 transition-transform">Logout</button>
         </form>
     </div>
 }
 else
 {
-  
     <div class="flex items-center space-x-6">
-        
-      
-        <a class="bg-gradient-to-r from-primary to-primary-container text-on-primary px-6 py-2 rounded-sm text-sm font-label tracking-widest uppercase hover:opacity-90 scale-95 active:scale-100 transition-transform"
-               asp-area="Identity"
-               asp-page="/Account/Login">
-            Login
-        </a>
-        
-       
-        <a class="bg-gradient-to-r from-primary to-primary-container text-on-primary px-6 py-2 rounded-sm text-sm font-label tracking-widest uppercase hover:opacity-90 scale-95 active:scale-100 transition-transform"
-               asp-area="Identity"
-               asp-page="/Account/Register">
-           Register
-
-        </a>
+        <a class="text-[#1a1c1c]/70 font-label text-sm tracking-widest uppercase hover:text-[#775a19] transition-colors" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        <a class="bg-gradient-to-r from-primary to-primary-container text-on-primary px-6 py-2 rounded-sm text-sm font-label tracking-widest uppercase hover:opacity-90 scale-95 active:scale-100 transition-transform" asp-area="Identity" asp-page="/Account/Register">Sign Up</a>
     </div>
 }
