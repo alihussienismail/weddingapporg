@@ -1,0 +1,55 @@
+﻿@page
+@model weddingapporg.Pages.Admin.AddUserModel
+@{
+    ViewData["Title"] = "Add New User";
+    Layout = "/Pages/Shared/AdminLTE/_Layout.cshtml";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Add New User</h3>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="form-group">
+                <label asp-for="Input.Email"></label>
+                <input asp-for="Input.Email" class="form-control" />
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Input.Password"></label>
+                <input asp-for="Input.Password" class="form-control" />
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Input.ConfirmPassword"></label>
+                <input asp-for="Input.ConfirmPassword" class="form-control" />
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Input.FName"></label>
+                <input asp-for="Input.FName" class="form-control" />
+                <span asp-validation-for="Input.FName" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Input.LName"></label>
+                <input asp-for="Input.LName" class="form-control" />
+                <span asp-validation-for="Input.LName" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group form-check">
+                <input asp-for="Input.IsAdmin" class="form-check-input" />
+                <label asp-for="Input.IsAdmin" class="form-check-label"></label>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Create User</button>
+            <a asp-page="/Admin/Users" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>

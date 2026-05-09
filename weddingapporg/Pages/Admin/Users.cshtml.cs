@@ -35,6 +35,7 @@ namespace weddingapporg.Pages.Admin
             return Page();
         }
 
+        // Toggle Admin Status
         public async Task<IActionResult> OnPostToggleAdminAsync(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
@@ -42,6 +43,24 @@ namespace weddingapporg.Pages.Admin
             {
                 user.IsAdmin = !user.IsAdmin;
                 await _userManager.UpdateAsync(user);
+            }
+            return RedirectToPage();
+        }
+
+        // Delete User
+        public async Task<IActionResult> OnPostDeleteAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                var result = await _userManager.DeleteAsync(user);
+                if (!result.Succeeded)
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
             }
             return RedirectToPage();
         }
