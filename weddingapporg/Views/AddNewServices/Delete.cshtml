@@ -1,3 +1,10 @@
+@{
+    if (!User.Identity.IsAuthenticated || !User.IsInRole("Admin"))
+    {
+        <div class="alert alert-danger">You are not authorized to access this page.</div>
+        return;
+    }
+}
 @model weddingapporg.Models.Service
 @{
     ViewData["Title"] = "Delete Service";

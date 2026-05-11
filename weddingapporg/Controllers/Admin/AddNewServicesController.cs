@@ -1,27 +1,35 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
 using weddingapporg.Data;
 using weddingapporg.Models;
-using Microsoft.AspNetCore.Hosting;
-using System.IO;
 
 namespace weddingapporg.Controllers.Admin
 {
     public class AddNewServicesController : Controller
     {
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public AddNewServicesController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
+        public AddNewServicesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
-            _webHostEnvironment = webHostEnvironment;
+            _userManager = userManager;
         }
 
-        // GET: AddNewServices
+        // GET: AddNewServices    
         public async Task<IActionResult> Index()
         {
             var services = await _context.Services.ToListAsync();
+
+            // جلب صلاحية الأدمن من المستخدم الحالي
+            var user = await _userManager.GetUserAsync(User);
+            ViewBag.IsAdmin = user != null && user.IsAdmin;
+
             return View(services);
         }
 
