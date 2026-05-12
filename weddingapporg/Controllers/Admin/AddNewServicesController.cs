@@ -15,10 +15,11 @@ namespace weddingapporg.Controllers.Admin
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public AddNewServicesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public AddNewServicesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             _userManager = userManager;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         // GET: AddNewServices    

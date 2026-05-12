@@ -1,0 +1,232 @@
+@page
+@model MyBookingsModel
+@using weddingapporg.Models
+@{
+    ViewData["Title"] = "My Bookings";
+
+    var serviceTypeNames = new Dictionary<int, string>
+    {
+        { 1, "Venue" }, { 2, "Catering" }, { 3, "Photography" },
+        { 4, "Decoration" }, { 5, "Music & Entertainment" },
+        { 6, "Transportation" }, { 7, "Other" }
+    };
+    var today = DateTime.Today;
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div style="position: fixed; top: 80px; left: 50%; transform: translateX(-50%); z-index: 9999; min-width: 320px; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 8px; padding: 15px 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); text-align:center;">
+        @TempData["SuccessMessage"]
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div style="position: fixed; top: 80px; left: 50%; transform: translateX(-50%); z-index: 9999; min-width: 320px; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 8px; padding: 15px 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); text-align:center;">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<div class="max-w-6xl mx-auto px-6 py-12">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-10">
+        <div>
+            <h1 class="font-headline text-3xl md:text-4xl text-on-surface">
+                @(Model.IsAdmin ? "All Bookings" : "My Bookings")
+            </h1>
+            <p class="font-body text-sm text-on-surface-variant mt-1 opacity-70">
+                @(Model.IsAdmin ? "Manage every booking across the platform." : "Your wedding service reservations.")
+            </p>
+        </div>
+        <a asp-page="/Index" class="font-label text-xs uppercase tracking-widest text-primary border-b border-primary/30 pb-1 hover:opacity-70 transition-all">
+            ← Back to Home
+        </a>
+    </div>
+
+    @if (!Model.Bookings.Any())
+    {
+        <div class="text-center py-32 text-on-surface-variant">
+            <span class="material-symbols-outlined text-7xl opacity-25 block mb-6">event_busy</span>
+            <h2 class="font-headline text-2xl mb-2">No bookings yet</h2>
+            <p class="font-body text-sm opacity-60 mb-8">Browse our venues and services and make your first booking!</p>
+            <a asp-page="/Index" class="bg-primary text-on-primary px-8 py-4 rounded-xl font-label text-sm tracking-widest uppercase hover:bg-primary-container transition-colors">
+                Explore Services
+            </a>
+        </div>
+    }
+    else
+    {
+        <!-- Stats row -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+            @{
+                var confirmed = Model.Bookings.Count(b => b.Status == "Confirmed");
+                var cancelled = Model.Bookings.Count(b => b.Status == "Cancelled");
+                var upcoming = Model.Bookings.Count(b => b.Status == "Confirmed" && b.BookingDate.Date >= today);
+                var totalSpend = Model.Bookings.Where(b => b.Status == "Confirmed").Sum(b => b.TotalPrice);
+            }
+            <div class="bg-surface-container-low rounded-2xl p-5 text-center">
+                <div class="font-headline text-3xl text-primary">@Model.Bookings.Count</div>
+                <div class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant mt-1">Total</div>
+            </div>
+            <div class="bg-surface-container-low rounded-2xl p-5 text-center">
+                <div class="font-headline text-3xl text-primary">@upcoming</div>
+                <div class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant mt-1">Upcoming</div>
+            </div>
+            <div class="bg-surface-container-low rounded-2xl p-5 text-center">
+                <div class="font-headline text-3xl text-primary">@confirmed</div>
+                <div class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant mt-1">Confirmed</div>
+            </div>
+            <div class="bg-surface-container-low rounded-2xl p-5 text-center">
+                <div class="font-headline text-3xl text-primary">@totalSpend.ToString("C")</div>
+                <div class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant mt-1">
+                    @(Model.IsAdmin ? "Platform Revenue" : "Total Spent")
+                </div>
+            </div>
+        </div>
+
+        <!-- Booking cards -->
+        <div class="space-y-4">
+            @foreach (var b in Model.Bookings)
+            {
+                var isPast = b.BookingDate.Date < today;
+                var isCancelled = b.Status == "Cancelled";
+                var isPending  = b.Status == "PendingPayment";
+                var isPaid     = b.PaymentStatus == "Paid";
+                var typeName = b.Service != null && serviceTypeNames.ContainsKey(b.Service.ServiceType)
+                    ? serviceTypeNames[b.Service.ServiceType] : "Service";
+                var isVenue = b.Service?.ServiceType == 1;
+
+                <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-2xl p-6 flex flex-col md:flex-row gap-6 items-start transition-all @(isCancelled ? "opacity-60" : "")">
+
+                    <!-- Image thumbnail -->
+                    <div class="w-full md:w-28 h-24 md:h-20 shrink-0 rounded-xl overflow-hidden bg-primary-fixed/30 flex items-center justify-center">
+                        @if (!string.IsNullOrEmpty(b.Service?.MainImage))
+                        {
+                            <img src="@b.Service.MainImage" alt="@b.Service.Service_Name" class="w-full h-full object-cover" />
+                        }
+                        else
+                        {
+                            <span class="material-symbols-outlined text-primary text-3xl">domain</span>
+                        }
+                    </div>
+
+                    <!-- Details -->
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-start justify-between gap-4 flex-wrap">
+                            <div>
+                                <span class="font-label text-[10px] uppercase tracking-widest text-primary mb-1 block">@typeName</span>
+                                <h3 class="font-headline text-xl text-on-surface">@b.Service?.Service_Name</h3>
+                                <p class="text-xs text-on-surface-variant mt-0.5">@b.Service?.City</p>
+                            </div>
+                            <!-- Status badges -->
+                            <div class="flex flex-col gap-1.5 shrink-0 items-end">
+                                <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full
+                                    @(isCancelled ? "bg-error-container text-on-error-container" :
+                                      isPending ? "bg-[#fff3cd] text-[#856404]" :
+                                      isPast ? "bg-surface-container text-on-surface-variant" :
+                                      "bg-[#d4edda] text-[#155724]")"> 
+                                    <span class="w-1.5 h-1.5 rounded-full inline-block
+                                        @(isCancelled ? "bg-error" :
+                                          isPending ? "bg-[#ffc107]" :
+                                          isPast ? "bg-outline" :
+                                          "bg-[#28a745]")"></span>
+                                    @(isCancelled ? "Cancelled" : isPending ? "Pending Payment" : isPast ? "Completed" : "Confirmed")
+                                </span>
+                                @if (isPaid)
+                                {
+                                    <span class="inline-flex items-center gap-1 text-[10px] font-semibold px-2.5 py-1 rounded-full bg-primary/10 text-primary">
+                                        <span class="material-symbols-outlined text-xs">verified</span> Paid
+                                    </span>
+                                }
+                                else if (isPending)
+                                {
+                                    <span class="inline-flex items-center gap-1 text-[10px] px-2.5 py-1 rounded-full bg-[#fff3cd] text-[#856404]">
+                                        <span class="material-symbols-outlined text-xs">schedule</span> Awaiting
+                                    </span>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Date + time -->
+                        <div class="flex flex-wrap gap-4 mt-3">
+                            <div class="flex items-center gap-1.5 text-sm text-on-surface-variant">
+                                <span class="material-symbols-outlined text-base text-primary">calendar_month</span>
+                                @b.BookingDate.ToString("MMMM d, yyyy")
+                            </div>
+                            @if (isVenue)
+                            {
+                                <div class="flex items-center gap-1.5 text-sm text-on-surface-variant">
+                                    <span class="material-symbols-outlined text-base text-primary">schedule</span>
+                                    Full day
+                                </div>
+                            }
+                            else if (b.StartHour.HasValue && b.EndHour.HasValue)
+                            {
+                                <div class="flex items-center gap-1.5 text-sm text-on-surface-variant">
+                                    <span class="material-symbols-outlined text-base text-primary">schedule</span>
+                                    @b.StartHour:00 – @b.EndHour:00
+                                    (@(b.EndHour - b.StartHour) hr@(b.EndHour - b.StartHour != 1 ? "s" : ""))
+                                </div>
+                            }
+                            <div class="flex items-center gap-1.5 text-sm font-semibold text-primary">
+                                <span class="material-symbols-outlined text-base">payments</span>
+                                @b.TotalPrice.ToString("C")
+                            </div>
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(b.Notes))
+                        {
+                            <p class="text-xs text-on-surface-variant mt-2 italic border-l-2 border-outline-variant pl-3">@b.Notes</p>
+                        }
+
+                        @if (Model.IsAdmin && b.User != null)
+                        {
+                            <p class="text-xs text-on-surface-variant mt-2">
+                                👤 Booked by: <span class="font-semibold">@(b.User.FName + " " + b.User.LName) (@b.User.Email)</span>
+                            </p>
+                        }
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex flex-col gap-2 shrink-0">
+                        <a asp-page="/ServiceDetail" asp-route-id="@b.ServiceId"
+                           class="text-center font-label text-xs uppercase tracking-widest px-4 py-2 border border-outline-variant rounded-xl hover:bg-surface-container-low transition-all text-on-surface">
+                            View Service
+                        </a>
+                        @if (!isCancelled && !isPending && b.BookingDate.Date >= today)
+                        {
+                            <form method="post" asp-page-handler="Cancel" asp-route-bookingId="@b.BookingId"
+                                  onsubmit="return confirm('Cancel this booking?')">
+                                @Html.AntiForgeryToken()
+                                <button type="submit"
+                                        class="w-full font-label text-xs uppercase tracking-widest px-4 py-2 bg-error-container text-on-error-container rounded-xl hover:opacity-80 transition-all">
+                                    Cancel
+                                </button>
+                            </form>
+                        }
+                        @if (isPending)
+                        {
+                            <a asp-page="/ServiceDetail" asp-route-id="@b.ServiceId"
+                               class="text-center font-label text-xs uppercase tracking-widest px-4 py-2 bg-primary text-on-primary rounded-xl hover:opacity-80 transition-all block">
+                                Pay Now
+                            </a>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        // Auto-hide toast after 4 seconds
+        setTimeout(function () {
+            document.querySelectorAll('[style*="position: fixed"]').forEach(el => {
+                el.style.transition = 'opacity 0.5s';
+                el.style.opacity = '0';
+                setTimeout(() => el.remove(), 500);
+            });
+        }, 4000);
+    </script>
+}

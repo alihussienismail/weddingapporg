@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 using weddingapporg.Data;
+using weddingapporg.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,8 +16,20 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<CartService>();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromHours(2);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+    options.Cookie.Name = ".Wedding.Session";
+});
 
 var app = builder.Build();
+
+// ── Configure Stripe API key ─────────────────────────────────────────────────
+StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -32,6 +46,7 @@ else
 app.UseHttpsRedirection();
 
 app.UseRouting();
+app.UseSession();
 
 app.UseAuthorization();
 
@@ -42,5 +57,12 @@ app.MapRazorPages()
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=AddNewServices}/{action=Index}/{id?}");
+
+// ── Seed sample services if the table is empty ──────────────────────────────
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<weddingapporg.Data.ApplicationDbContext>();
+    await weddingapporg.Data.DataSeeder.SeedServicesAsync(db);
+}
 
 app.Run();

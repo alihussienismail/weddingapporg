@@ -1,0 +1,89 @@
+@page
+@model PaymentSuccessModel
+@{
+    ViewData["Title"] = "Payment Successful";
+}
+
+<div class="min-h-screen bg-surface flex items-center justify-center px-6 py-20">
+    <div class="max-w-2xl w-full">
+
+        <!-- Success animation -->
+        <div class="text-center mb-10">
+            <div class="relative inline-flex items-center justify-center mb-6">
+                <div class="w-28 h-28 rounded-full bg-primary/10 animate-pulse flex items-center justify-center">
+                    <div class="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-primary" style="font-size:2.5rem;">check_circle</span>
+                    </div>
+                </div>
+            </div>
+            <h1 class="font-headline text-3xl md:text-4xl text-on-surface mb-2">Payment Successful!</h1>
+            <p class="font-body text-on-surface-variant">
+                @Model.Bookings.Count booking@(Model.Bookings.Count != 1 ? "s" : "") confirmed. Here's your receipt:
+            </p>
+        </div>
+
+        <!-- Booking receipt cards -->
+        @if (Model.Bookings.Any())
+        {
+            <div class="space-y-4 mb-8">
+                @foreach (var b in Model.Bookings)
+                {
+                    var isVenue = b.Service?.ServiceType == 1;
+                    <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-2xl p-5 flex gap-4">
+                        @if (!string.IsNullOrEmpty(b.Service?.MainImage))
+                        {
+                            <img src="@b.Service.MainImage" alt="@b.Service.Service_Name"
+                                 class="w-20 h-16 object-cover rounded-xl shrink-0" />
+                        }
+                        <div class="flex-1 min-w-0">
+                            <h3 class="font-headline text-base text-on-surface truncate">@b.Service?.Service_Name</h3>
+                            <div class="flex flex-wrap gap-3 mt-1 text-xs text-on-surface-variant">
+                                <span class="flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-sm text-primary">calendar_month</span>
+                                    @b.BookingDate.ToString("dddd, MMM d yyyy")
+                                </span>
+                                @if (isVenue)
+                                {
+                                    <span class="flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-sm text-primary">event</span> Full Day
+                                    </span>
+                                }
+                                else if (b.StartHour.HasValue)
+                                {
+                                    <span class="flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-sm text-primary">schedule</span>
+                                        @b.StartHour:00 – @b.EndHour:00
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                        <div class="shrink-0 text-right">
+                            <p class="font-headline text-lg text-primary">@b.TotalPrice.ToString("C")</p>
+                            <span class="inline-flex items-center gap-1 text-[10px] bg-[#d4edda] text-[#155724] px-2 py-0.5 rounded-full mt-1">
+                                <span class="w-1.5 h-1.5 bg-[#28a745] rounded-full inline-block"></span> Confirmed
+                            </span>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Grand total -->
+            <div class="bg-primary-fixed/20 rounded-2xl px-6 py-4 flex justify-between items-center mb-8">
+                <span class="font-label text-xs uppercase tracking-widest text-on-surface-variant">Total Paid</span>
+                <span class="font-headline text-3xl text-primary">@Model.GrandTotal.ToString("C")</span>
+            </div>
+        }
+
+        <!-- Actions -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a asp-page="/MyBookings"
+               class="text-center bg-primary text-on-primary px-8 py-4 rounded-xl font-label text-sm tracking-widest uppercase hover:bg-[#5d4201] transition-colors shadow-md">
+                View My Bookings
+            </a>
+            <a asp-page="/Index"
+               class="text-center border border-outline-variant text-on-surface px-8 py-4 rounded-xl font-label text-sm tracking-widest uppercase hover:bg-surface-container-low transition-colors">
+                Back to Home
+            </a>
+        </div>
+    </div>
+</div>

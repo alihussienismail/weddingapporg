@@ -1,0 +1,39 @@
+@page
+@model PaymentCancelModel
+@{
+    ViewData["Title"] = "Payment Cancelled";
+}
+
+<div class="min-h-screen bg-surface flex items-center justify-center px-6 py-20">
+    <div class="max-w-md w-full text-center">
+
+        <div class="relative inline-flex items-center justify-center mb-8">
+            <div class="w-28 h-28 rounded-full bg-error-container/40 flex items-center justify-center">
+                <span class="material-symbols-outlined text-error" style="font-size:3rem;">cancel</span>
+            </div>
+        </div>
+
+        <h1 class="font-headline text-3xl text-on-surface mb-2">Payment Cancelled</h1>
+        <p class="font-body text-on-surface-variant mb-6">
+            No charge was made. Your booking has been removed.
+            @if (Model.Booking?.Service != null)
+            {
+                <span>You can try booking <strong>@Model.Booking.Service.Service_Name</strong> again whenever you're ready.</span>
+            }
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            @if (Model.Booking?.ServiceId != null)
+            {
+                <a asp-page="/ServiceDetail" asp-route-id="@Model.Booking.ServiceId"
+                   class="bg-primary text-on-primary px-8 py-4 rounded-xl font-label text-sm tracking-widest uppercase hover:bg-[#5d4201] transition-colors shadow-md">
+                    Try Again
+                </a>
+            }
+            <a asp-page="/Index"
+               class="border border-outline-variant text-on-surface px-8 py-4 rounded-xl font-label text-sm tracking-widest uppercase hover:bg-surface-container-low transition-colors">
+                Back to Home
+            </a>
+        </div>
+    </div>
+</div>

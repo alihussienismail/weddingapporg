@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+@using weddingapporg.Services
+@inject CartService _cartSvc
+<!DOCTYPE html>
 <html class="light" lang="en">
 <head>
     <meta charset="utf-8" />
@@ -95,10 +97,22 @@
             </div>
             <div class="hidden md:flex items-center space-x-12">
                 <a class="text-[#775a19] dark:text-[#c5a059] border-b border-[#775a19] pb-1 hover:opacity-80 transition-all duration-300" asp-page="/Index">Venues</a>
-<a class="text-[#1a1c1c]/70 dark:text-[#faf9f8]/70 hover:text-[#775a19] transition-colors" href="/AddNewServices/Index">Services</a>
+                <a class="text-[#1a1c1c]/70 dark:text-[#faf9f8]/70 hover:text-[#775a19] transition-colors" href="/AddNewServices/Index">Services</a>
                 <a class="text-[#1a1c1c]/70 dark:text-[#faf9f8]/70 hover:text-[#775a19] transition-colors" asp-page="/MyBookings">My Bookings</a>
             </div>
             <div class="flex items-center space-x-6">
+                @{
+                    int cartCount = 0;
+                    try { cartCount = _cartSvc.Count(Context.Session); } catch { }
+                }
+                <!-- Cart icon -->
+                <a asp-page="/Cart" class="relative text-[#1a1c1c]/70 hover:text-[#775a19] transition-colors">
+                    <span class="material-symbols-outlined text-2xl">shopping_cart</span>
+                    @if (cartCount > 0)
+                    {
+                        <span class="absolute -top-1.5 -right-1.5 bg-primary text-on-primary text-[10px] font-bold w-4.5 h-4.5 rounded-full flex items-center justify-center" style="min-width:18px;height:18px;font-size:10px;padding:2px;">@cartCount</span>
+                    }
+                </a>
                 <partial name="_LoginPartial" />
             </div>
         </div>

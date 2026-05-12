@@ -1,0 +1,383 @@
+@page "{id:guid}"
+@model ServiceDetailModel
+@using weddingapporg.Models
+@{
+    ViewData["Title"] = Model.Service?.Service_Name ?? "Service Details";
+    var typeNames = new Dictionary<int, string> {
+        {1,"Venue"},{2,"Catering"},{3,"Photography"},
+        {4,"Decoration"},{5,"Music & Entertainment"},{6,"Transportation"},{7,"Other"}
+    };
+    var typeName = Model.Service != null && typeNames.ContainsKey(Model.Service.ServiceType)
+        ? typeNames[Model.Service.ServiceType] : "Service";
+    var bookedDatesJson = System.Text.Json.JsonSerializer.Serialize(
+        Model.BookedDates.Select(d => d.ToString("yyyy-MM-dd")).ToList());
+}
+
+@if (Model.Service == null)
+{
+    <div class="text-center py-40">
+        <h1 class="font-headline text-4xl text-on-surface mb-4">Service Not Found</h1>
+        <a asp-page="/Index" class="text-primary underline">Back to Home</a>
+    </div>
+    return;
+}
+
+<!-- Hero -->
+<div class="relative h-[52vh] min-h-[320px] overflow-hidden">
+    @if (!string.IsNullOrEmpty(Model.Service.MainImage))
+    {
+        <img class="w-full h-full object-cover" src="@Model.Service.MainImage" alt="@Model.Service.Service_Name" />
+    }
+    else
+    {
+        <div class="w-full h-full bg-primary-fixed/40 flex items-center justify-center">
+            <span class="material-symbols-outlined text-primary" style="font-size:5rem;">domain</span>
+        </div>
+    }
+    <div class="absolute inset-0 bg-gradient-to-t from-on-surface/70 via-on-surface/20 to-transparent"></div>
+    <div class="absolute bottom-8 left-8">
+        <span class="inline-block bg-primary text-on-primary text-[10px] font-label tracking-[0.2em] uppercase px-3 py-1.5 rounded-full mb-3">@typeName</span>
+        <h1 class="font-headline text-3xl md:text-5xl text-white">@Model.Service.Service_Name</h1>
+        <p class="text-white/80 text-sm mt-1">
+            <span class="material-symbols-outlined text-sm align-middle mr-1">location_on</span>
+            @Model.Service.City@(!string.IsNullOrEmpty(Model.Service.Address) ? " · " + Model.Service.Address : "")
+        </p>
+    </div>
+    <a href="javascript:history.back()" class="absolute top-6 left-6 bg-white/80 backdrop-blur-md px-4 py-2 rounded-full text-sm font-label text-on-surface flex items-center gap-2 hover:bg-white transition-all shadow">
+        <span class="material-symbols-outlined text-base">arrow_back</span> Back
+    </a>
+</div>
+
+<!-- Cart added toast -->
+@if (Model.PageMessage != null)
+{
+    <div id="cartToast" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-[#d4edda] text-[#155724] border border-[#c3e6cb] px-6 py-3 rounded-xl shadow-lg text-sm font-semibold flex items-center gap-2">
+        <span class="material-symbols-outlined text-base">check_circle</span>
+        @Model.PageMessage
+        <a asp-page="/Cart" class="ml-3 underline font-label text-xs uppercase tracking-widest">View Cart →</a>
+    </div>
+}
+
+<!-- Main content -->
+<div class="max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 lg:grid-cols-3 gap-12">
+
+    <!-- LEFT: Info + recommended add-ons -->
+    <div class="lg:col-span-2 space-y-10">
+
+        <!-- Key stats -->
+        <div class="flex flex-wrap gap-3">
+            <div class="flex items-center gap-2 bg-surface-container-low px-4 py-2.5 rounded-full">
+                <span class="material-symbols-outlined text-primary text-lg">payments</span>
+                <span class="font-semibold text-sm text-on-surface">
+                    @Model.Service.Price.ToString("C")
+                    <span class="font-normal text-on-surface-variant text-xs">@(Model.IsVenue ? "/ event day" : "/ hour")</span>
+                </span>
+            </div>
+            @if (Model.Service.Capacity.HasValue)
+            {
+                <div class="flex items-center gap-2 bg-surface-container-low px-4 py-2.5 rounded-full">
+                    <span class="material-symbols-outlined text-primary text-lg">groups</span>
+                    <span class="font-semibold text-sm text-on-surface">Up to @Model.Service.Capacity guests</span>
+                </div>
+            }
+            <div class="flex items-center gap-2 bg-primary-fixed/40 px-4 py-2.5 rounded-full">
+                <span class="material-symbols-outlined text-primary text-lg">@(Model.IsVenue ? "event" : "schedule")</span>
+                <span class="font-semibold text-sm text-primary">@(Model.IsVenue ? "Full Day" : "Hourly")</span>
+            </div>
+        </div>
+
+        <!-- Description -->
+        @if (!string.IsNullOrEmpty(Model.Service.Description))
+        {
+            <div>
+                <h2 class="font-headline text-xl text-on-surface mb-3">About</h2>
+                <p class="font-body text-on-surface-variant leading-relaxed">@Model.Service.Description</p>
+            </div>
+        }
+
+        <!-- Availability warnings -->
+        @if (Model.IsVenue && Model.BookedDates.Any())
+        {
+            <div class="bg-error-container/40 border border-error-container rounded-xl p-5">
+                <h3 class="font-label text-xs uppercase tracking-widest text-on-error-container mb-3">⚠ Booked Dates</h3>
+                <div class="flex flex-wrap gap-2">
+                    @foreach (var d in Model.BookedDates)
+                    {
+                        <span class="bg-error-container text-on-error-container text-xs font-semibold px-3 py-1 rounded-full">@d.ToString("MMM d, yyyy")</span>
+                    }
+                </div>
+            </div>
+        }
+
+        <!-- ── RECOMMENDED ADD-ONS (venues only) ── -->
+        @if (Model.IsVenue && Model.RecommendedServices.Any())
+        {
+            <div>
+                <div class="flex items-end justify-between mb-5">
+                    <div>
+                        <span class="font-label text-primary text-xs tracking-[0.2em] uppercase block mb-1">Complete Your Day</span>
+                        <h2 class="font-headline text-2xl text-on-surface">Add Services to Cart</h2>
+                    </div>
+                    <a asp-page="/Cart" class="text-xs font-label tracking-widest text-primary uppercase border-b border-primary/30 pb-0.5 flex items-center gap-1 hover:opacity-70">
+                        <span class="material-symbols-outlined text-sm">shopping_cart</span> View Cart
+                    </a>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    @foreach (var rec in Model.RecommendedServices)
+                    {
+                        var rLabel = Model.TypeLabel(rec.ServiceType);
+                        var rIcon  = Model.TypeIcon(rec.ServiceType);
+                        var formId = $"addonForm_{rec.Id:N}";
+                        var toggleId = $"addonToggle_{rec.Id:N}";
+
+                        <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-md hover:border-primary/30">
+                            <!-- Card top: image + info -->
+                            <div class="flex gap-0">
+                                <div class="w-24 shrink-0 overflow-hidden bg-primary-fixed/20">
+                                    @if (!string.IsNullOrEmpty(rec.MainImage))
+                                    {
+                                        <img src="@rec.MainImage" alt="@rec.Service_Name" class="w-full h-full object-cover" />
+                                    }
+                                    else
+                                    {
+                                        <div class="w-full h-full flex items-center justify-center p-4">
+                                            <span class="material-symbols-outlined text-primary text-3xl">@rIcon</span>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="flex-1 p-4">
+                                    <span class="font-label text-[9px] uppercase tracking-widest text-primary block mb-0.5">@rLabel</span>
+                                    <h4 class="font-headline text-base text-on-surface">@rec.Service_Name</h4>
+                                    <p class="text-xs text-on-surface-variant">@rec.City · @rec.Price.ToString("C")/hr</p>
+
+                                    <!-- Toggle expand button -->
+                                    <button type="button" onclick="toggleAddon('@toggleId', '@formId')"
+                                            class="mt-3 w-full flex items-center justify-center gap-1.5 bg-primary/10 text-primary text-xs font-label tracking-widest uppercase px-3 py-2 rounded-lg hover:bg-primary hover:text-on-primary transition-all">
+                                        <span class="material-symbols-outlined text-sm">add_shopping_cart</span>
+                                        Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Expandable form -->
+                            <div id="@formId" class="hidden border-t border-outline-variant/30 px-4 pb-4 pt-3 bg-surface-container-low/50">
+                                <form method="post" action="/Cart?handler=Add">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="AddServiceId" value="@rec.Id" />
+                                    <input type="hidden" name="AddReturnUrl" value="/ServiceDetail/@Model.Service.Id" />
+
+                                    <div class="mb-3">
+                                        <label class="block text-xs font-semibold text-on-surface-variant uppercase tracking-widest mb-1">Date</label>
+                                        <input type="date" name="AddBookingDate" id="addonDate_@rec.Id.ToString("N")"
+                                               class="w-full border border-outline-variant rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+                                               min="@DateTime.Today.AddDays(1).ToString("yyyy-MM-dd")"
+                                               value="@DateTime.Today.AddDays(1).ToString("yyyy-MM-dd")" />
+                                    </div>
+
+                                    <div class="grid grid-cols-2 gap-3 mb-3">
+                                        <div>
+                                            <label class="block text-xs font-semibold text-on-surface-variant uppercase tracking-widest mb-1">From</label>
+                                            <select name="AddStartHour" onchange="calcPrice(this, @rec.Price)"
+                                                    class="w-full border border-outline-variant rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40">
+                                                @for (int h = 0; h <= 23; h++)
+                                                {
+                                                    <option value="@h" selected="@(h == 9)">@h.ToString("D2"):00</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-semibold text-on-surface-variant uppercase tracking-widest mb-1">To</label>
+                                            <select name="AddEndHour" onchange="calcPrice(this, @rec.Price)"
+                                                    class="w-full border border-outline-variant rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40">
+                                                @for (int h = 1; h <= 24; h++)
+                                                {
+                                                    <option value="@h" selected="@(h == 11)">@h.ToString("D2"):00</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <p class="text-xs text-primary font-semibold text-center mb-3" id="addonTotal_@rec.Id.ToString("N")">
+                                        2 hrs × @rec.Price.ToString("C") = @((rec.Price * 2).ToString("C"))
+                                    </p>
+
+                                    <button type="submit"
+                                            class="w-full bg-primary text-on-primary py-2.5 rounded-lg font-label text-xs tracking-widest uppercase hover:bg-[#5d4201] transition-colors">
+                                        ✓ Add to Cart
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- RIGHT: Main booking panel → "Add to Cart" -->
+    <div class="lg:col-span-1">
+        <div class="sticky top-28 bg-surface-container-lowest border border-outline-variant/40 rounded-2xl shadow-xl overflow-hidden">
+            <div class="bg-primary px-6 py-4">
+                <h2 class="font-headline text-lg text-on-primary">
+                    @(Model.IsVenue ? "Reserve This Venue" : "Book This Service")
+                </h2>
+                <p class="text-on-primary/70 text-xs mt-0.5">
+                    @(Model.IsVenue ? "Add to cart — then checkout all at once" : $"@{Model.Service.Price:C}/hr · add to cart")
+                </p>
+            </div>
+            <div class="p-6">
+                @if (!User.Identity!.IsAuthenticated)
+                {
+                    <div class="text-center py-6">
+                        <span class="material-symbols-outlined text-primary text-4xl block mb-3">lock</span>
+                        <p class="font-body text-sm text-on-surface-variant mb-5">Please log in to add to cart.</p>
+                        <a asp-area="Identity" asp-page="/Account/Login"
+                           class="block text-center bg-primary text-on-primary py-3 rounded-xl font-label text-sm tracking-widest uppercase">
+                            Log In
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    <form method="post" asp-route-id="@Model.Service.Id">
+                        @Html.AntiForgeryToken()
+
+                        <div class="mb-4">
+                            <label class="block text-xs font-semibold text-on-surface-variant uppercase tracking-widest mb-2">
+                                @(Model.IsVenue ? "Event Date" : "Service Date")
+                            </label>
+                            <input asp-for="BookingDate" type="date" id="mainDatePicker"
+                                   min="@DateTime.Today.AddDays(1).ToString("yyyy-MM-dd")"
+                                   class="w-full border border-outline-variant rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all" />
+                        </div>
+
+                        @if (!Model.IsVenue)
+                        {
+                            <div class="grid grid-cols-2 gap-3 mb-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-on-surface-variant uppercase tracking-widest mb-2">Start</label>
+                                    <select asp-for="StartHour" id="mainStart"
+                                            class="w-full border border-outline-variant rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all">
+                                        @for (int h = 0; h <= 23; h++) { <option value="@h" selected="@(h==9)">@h.ToString("D2"):00</option> }
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-on-surface-variant uppercase tracking-widest mb-2">End</label>
+                                    <select asp-for="EndHour" id="mainEnd"
+                                            class="w-full border border-outline-variant rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all">
+                                        @for (int h = 1; h <= 24; h++) { <option value="@h" selected="@(h==11)">@h.ToString("D2"):00</option> }
+                                    </select>
+                                </div>
+                            </div>
+                        }
+
+                        <!-- Price summary -->
+                        <div class="bg-primary-fixed/20 rounded-xl px-4 py-3 mb-4 text-center">
+                            <p class="text-xs text-on-surface-variant uppercase tracking-widest mb-1">Price</p>
+                            <p class="font-headline text-2xl text-primary" id="mainPrice">
+                                @(Model.IsVenue ? Model.Service.Price.ToString("C") : "—")
+                            </p>
+                        </div>
+
+                        <div class="mb-5">
+                            <label class="block text-xs font-semibold text-on-surface-variant uppercase tracking-widest mb-2">Notes</label>
+                            <textarea asp-for="Notes" rows="2"
+                                      class="w-full border border-outline-variant rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 resize-none"
+                                      placeholder="Special requirements..."></textarea>
+                        </div>
+
+                        <button type="submit"
+                                class="w-full bg-primary text-on-primary py-4 rounded-xl font-label text-sm tracking-widest uppercase hover:bg-[#5d4201] transition-colors shadow-md flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined text-base">add_shopping_cart</span>
+                            Add to Cart
+                        </button>
+
+                        <!-- View Cart link -->
+                        <a asp-page="/Cart"
+                           class="mt-3 block text-center text-xs font-label uppercase tracking-widest text-primary border border-primary/30 py-3 rounded-xl hover:bg-primary/5 transition-colors">
+                            <span class="material-symbols-outlined text-sm align-middle">shopping_cart</span>
+                            View Cart
+                        </a>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    // Toggle add-on expand form
+    function toggleAddon(toggleId, formId) {
+        const form = document.getElementById(formId);
+        if (form) {
+            form.classList.toggle('hidden');
+            // Sync date with main date picker
+            const mainDate = document.getElementById('mainDatePicker');
+            if (mainDate && mainDate.value) {
+                const addonDate = form.querySelector('input[type="date"]');
+                if (addonDate) addonDate.value = mainDate.value;
+            }
+        }
+    }
+
+    // Live price calc for add-on forms
+    function calcPrice(sel, pricePerHour) {
+        const form = sel.closest('form');
+        if (!form) return;
+        const start = parseInt(form.querySelector('select[name="AddStartHour"]').value);
+        const end   = parseInt(form.querySelector('select[name="AddEndHour"]').value);
+        const hrs   = end - start;
+        const totalEl = form.parentElement.querySelector('[id^="addonTotal_"]');
+        if (totalEl) {
+            if (hrs > 0) {
+                totalEl.textContent = hrs + ' hr' + (hrs !== 1 ? 's' : '') + ' × $' + pricePerHour.toFixed(2) + ' = $' + (pricePerHour * hrs).toFixed(2);
+            } else {
+                totalEl.textContent = 'End must be after start';
+            }
+        }
+    }
+
+    // Main price calculator (additional services)
+    (function () {
+        const isVenue = @Model.IsVenue.ToString().ToLower();
+        if (isVenue) return;
+        const price = @Model.Service.Price;
+        const startSel = document.getElementById('mainStart');
+        const endSel   = document.getElementById('mainEnd');
+        const priceEl  = document.getElementById('mainPrice');
+        function upd() {
+            const hrs = parseInt(endSel.value) - parseInt(startSel.value);
+            priceEl.textContent = hrs > 0 ? '$' + (price * hrs).toFixed(2) : '—';
+        }
+        startSel?.addEventListener('change', upd);
+        endSel?.addEventListener('change', upd);
+        upd();
+    })();
+
+    // Auto-hide toast
+    setTimeout(function () {
+        const t = document.getElementById('cartToast');
+        if (t) { t.style.transition = 'opacity 0.5s'; t.style.opacity = '0'; setTimeout(() => t.remove(), 500); }
+    }, 4000);
+
+    // Sync main date picker to all open add-on date inputs
+    document.getElementById('mainDatePicker')?.addEventListener('change', function () {
+        document.querySelectorAll('input[name="AddBookingDate"]').forEach(function (el) {
+            el.value = document.getElementById('mainDatePicker').value;
+        });
+    });
+
+    // Booked-date warning
+    const bookedDates = @Html.Raw(bookedDatesJson);
+    document.getElementById('mainDatePicker')?.addEventListener('input', function () {
+        if (bookedDates.includes(this.value)) {
+            this.setCustomValidity('This date is already booked. Choose another.');
+            this.reportValidity();
+        } else {
+            this.setCustomValidity('');
+        }
+    });
+</script>
+}

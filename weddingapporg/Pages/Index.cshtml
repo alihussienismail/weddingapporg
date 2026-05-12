@@ -1,164 +1,332 @@
-﻿@page
+@page
 @model IndexModel
+@using weddingapporg.Models
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Home — The Editorial Wedding";
 
+    // Service type display info — use arrays to avoid named tuple issues in Razor
+    var typeLabels = new Dictionary<int, string[]>
+    {
+        { 2, new[] { "Catering",              "restaurant_menu" } },
+        { 3, new[] { "Photography",           "photo_camera"    } },
+        { 4, new[] { "Decoration",            "local_florist"   } },
+        { 5, new[] { "Music & Entertainment", "music_note"      } },
+        { 6, new[] { "Transportation",        "directions_car"  } },
+        { 7, new[] { "Other",                 "room_service"    } },
+    };
+
+    var grouped = Model.AdditionalServices
+        .GroupBy(s => s.ServiceType)
+        .ToList();
 }
 
 @if (TempData["SuccessMessage"] != null)
 {
-    <div class="alert alert-success alert-dismissible fade show text-center" role="alert" style="position: fixed; top: 80px; left: 50%; transform: translateX(-50%); z-index: 9999; min-width: 300px; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 8px; padding: 15px 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-        <i class="fas fa-check-circle me-2"></i> @TempData["SuccessMessage"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float: right; background: none; border: none; font-size: 20px; cursor: pointer;">&times;</button>
+    <div style="position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:9999;min-width:320px;background:#d4edda;color:#155724;border:1px solid #c3e6cb;border-radius:8px;padding:15px 20px;box-shadow:0 4px 12px rgba(0,0,0,.15);text-align:center;">
+        @TempData["SuccessMessage"]
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div style="position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:9999;min-width:320px;background:#f8d7da;color:#721c24;border:1px solid #f5c6cb;border-radius:8px;padding:15px 20px;box-shadow:0 4px 12px rgba(0,0,0,.15);text-align:center;">
+        ⚠️ @TempData["ErrorMessage"]
     </div>
 }
 
-<!-- Hero Section -->
+<!-- ===================== HERO ===================== -->
 <section class="relative h-[921px] flex items-center justify-center overflow-hidden px-8">
     <div class="absolute inset-0 z-0">
         <div class="absolute inset-0 bg-on-surface/20 z-10"></div>
-        <img class="w-full h-full object-cover" src="~/imgs/unnamed (1).png" />
+        <img class="w-full h-full object-cover" src="~/imgs/unnamed (1).png" alt="Wedding venue" />
     </div>
     <div class="relative z-20 text-center max-w-4xl">
         <p class="font-label text-white text-xs tracking-[0.3em] uppercase mb-6 opacity-90">Curating Unforgettable Moments</p>
         <h1 class="font-headline text-5xl md:text-7xl lg:text-8xl text-white mb-12 tracking-tight">
             Where <span class="serif-italic">Elegance</span><br />Meets Celebration
         </h1>
-        <!-- Search Bar -->
         <div class="bg-surface-container-lowest/90 backdrop-blur-md p-2 md:p-3 rounded-lg shadow-2xl flex flex-col md:flex-row gap-2 max-w-3xl mx-auto">
             <div class="flex-1 flex items-center px-4 border-r border-outline-variant/20">
                 <span class="material-symbols-outlined text-primary mr-3">location_on</span>
-                <input class="w-full bg-transparent border-none focus:ring-0 font-body text-on-surface placeholder:text-on-surface-variant/50" placeholder="Search destinations..." type="text" />
+                <input id="searchCity" class="w-full bg-transparent border-none focus:ring-0 font-body text-on-surface placeholder:text-on-surface-variant/50"
+                       placeholder="Search destinations..." type="text" />
             </div>
             <div class="flex-1 flex items-center px-4 border-r border-outline-variant/20">
                 <span class="material-symbols-outlined text-primary mr-3">calendar_month</span>
-                <input class="w-full bg-transparent border-none focus:ring-0 font-body text-on-surface placeholder:text-on-surface-variant/50" placeholder="Wedding Date" type="text" />
+                <input id="searchDate" class="w-full bg-transparent border-none focus:ring-0 font-body text-on-surface placeholder:text-on-surface-variant/50"
+                       placeholder="Wedding Date" type="date" min="@DateTime.Today.ToString("yyyy-MM-dd")" />
             </div>
-            <button class="bg-primary text-on-primary px-8 py-4 rounded-lg font-label text-sm tracking-widest uppercase hover:bg-primary-container transition-colors shrink-0">
+            <button id="searchBtn" class="bg-primary text-on-primary px-8 py-4 rounded-lg font-label text-sm tracking-widest uppercase hover:bg-primary-container transition-colors shrink-0">
                 Find Venues
             </button>
         </div>
     </div>
 </section>
 
-<!-- Featured Halls Bento Grid -->
-<section class="py-32 px-8 max-w-7xl mx-auto">
+<!-- ===================== FEATURED VENUES ===================== -->
+<section class="py-32 px-8 max-w-7xl mx-auto" id="venues">
     <div class="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
         <div class="max-w-xl">
             <span class="font-label text-primary text-xs tracking-[0.2em] uppercase mb-4 block">Exquisite Selection</span>
-            <h2 class="font-headline text-4xl md:text-5xl text-on-surface leading-tight">Featured <span class="serif-italic">Wedding Halls</span></h2>
+            <h2 class="font-headline text-4xl md:text-5xl text-on-surface leading-tight">
+                Featured <span class="serif-italic">Wedding Halls</span>
+            </h2>
         </div>
-        <a class="font-label text-sm tracking-widest uppercase text-on-surface-variant hover:text-primary border-b border-primary/30 pb-1 transition-all" href="#">View All Destinations</a>
+        <a class="font-label text-sm tracking-widest uppercase text-on-surface-variant hover:text-primary border-b border-primary/30 pb-1 transition-all"
+           href="/AddNewServices/Index">View All Services</a>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
-        <!-- Large Feature -->
-        <div class="md:col-span-7 group cursor-pointer">
-            <div class="relative overflow-hidden rounded-lg aspect-[4/3] mb-6">
-                <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="~/imgs/unnamed (6).png" />
-                <div class="absolute top-6 left-6 bg-surface-container-lowest/90 px-4 py-1 text-[10px] font-label tracking-widest uppercase">Paris, France</div>
-            </div>
-            <h3 class="font-headline text-2xl mb-2">The Grand Pavilion</h3>
-            <p class="text-on-surface-variant font-body text-sm leading-relaxed mb-4">An architectural masterpiece combining neo-classical grandeur with modern editorial touches.</p>
-            <div class="flex items-center gap-4 text-primary">
-                <span class="font-label text-xs tracking-widest uppercase">Starting at $12,500</span>
+
+    @if (!Model.VenueServices.Any())
+    {
+        <div class="text-center py-24 text-on-surface-variant">
+            <span class="material-symbols-outlined text-6xl opacity-30 block mb-4">domain</span>
+            <p class="font-headline text-2xl mb-2">No venues listed yet</p>
+            <p class="font-body text-sm opacity-60">The admin will add beautiful venues soon. Check back shortly!</p>
+        </div>
+    }
+    else
+    {
+        var first = Model.VenueServices[0];
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+            <!-- Large feature card -->
+            <a asp-page="/ServiceDetail" asp-route-id="@first.Id"
+               class="md:col-span-7 group cursor-pointer block" style="text-decoration:none;color:inherit;">
+                <div class="relative overflow-hidden rounded-lg aspect-[4/3] mb-6">
+                    @if (!string.IsNullOrEmpty(first.MainImage))
+                    {
+                        <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                             src="@first.MainImage" alt="@first.Service_Name" />
+                    }
+                    else
+                    {
+                        <div class="w-full h-full bg-primary-fixed/40 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-primary text-6xl">domain</span>
+                        </div>
+                    }
+                    <div class="absolute top-6 left-6 bg-surface-container-lowest/90 px-4 py-1 text-[10px] font-label tracking-widest uppercase">
+                        @first.City
+                    </div>
+                </div>
+                <h3 class="font-headline text-2xl mb-2">@first.Service_Name</h3>
+                @if (!string.IsNullOrEmpty(first.Description))
+                {
+                    <p class="text-on-surface-variant font-body text-sm leading-relaxed mb-4">
+                        @(first.Description.Length > 120 ? first.Description.Substring(0, 120) + "…" : first.Description)
+                    </p>
+                }
+                <div class="flex items-center gap-4 text-primary">
+                    <span class="font-label text-xs tracking-widest uppercase">Starting at @first.Price.ToString("C")</span>
+                    @if (first.Capacity.HasValue)
+                    {
+                        <span class="font-label text-xs text-on-surface-variant">· Up to @first.Capacity guests</span>
+                    }
+                </div>
+            </a>
+
+            <!-- Side stack -->
+            <div class="md:col-span-5 flex flex-col gap-12">
+                @foreach (var venue in Model.VenueServices.Skip(1))
+                {
+                    <a asp-page="/ServiceDetail" asp-route-id="@venue.Id"
+                       class="group cursor-pointer block" style="text-decoration:none;color:inherit;">
+                        <div class="relative overflow-hidden rounded-lg aspect-video mb-4">
+                            @if (!string.IsNullOrEmpty(venue.MainImage))
+                            {
+                                <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                     src="@venue.MainImage" alt="@venue.Service_Name" />
+                            }
+                            else
+                            {
+                                <div class="w-full h-full bg-primary-fixed/40 flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-primary text-4xl">domain</span>
+                                </div>
+                            }
+                        </div>
+                        <h3 class="font-headline text-xl mb-1">@venue.Service_Name</h3>
+                        <p class="font-label text-xs text-on-surface-variant tracking-widest uppercase">
+                            @venue.City · @venue.Price.ToString("C")
+                        </p>
+                    </a>
+                }
             </div>
         </div>
-        <!-- Side Stack -->
-        <div class="md:col-span-5 flex flex-col gap-12">
-            <div class="group cursor-pointer">
-                <div class="relative overflow-hidden rounded-lg aspect-video mb-4">
-                    <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="~/imgs/unnamed (8).png" />
-                </div>
-                <h3 class="font-headline text-xl mb-1">L'Orangerie Sanctuary</h3>
-                <p class="font-label text-xs text-on-surface-variant tracking-widest uppercase">Tuscany, Italy</p>
-            </div>
-            <div class="group cursor-pointer">
-                <div class="relative overflow-hidden rounded-lg aspect-video mb-4">
-                    <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="~/imgs/unnamed (7).png" />
-                </div>
-                <h3 class="font-headline text-xl mb-1">Cote d'Azur Terrace</h3>
-                <p class="font-label text-xs text-on-surface-variant tracking-widest uppercase">Nice, France</p>
-            </div>
-        </div>
-    </div>
+    }
 </section>
 
-<!-- Services: High Contrast Asymmetric Layout -->
-<section class="bg-surface-container-low py-32 overflow-hidden">
+<!-- ===================== ADDITIONAL SERVICES ===================== -->
+<section class="bg-surface-container-low py-32 overflow-hidden" id="services">
     <div class="max-w-7xl mx-auto px-8">
-        <!-- Culinary Section -->
-        <div class="flex flex-col lg:flex-row items-center gap-20 mb-40">
-            <div class="w-full lg:w-1/2 relative">
-                <div class="absolute -top-10 -left-10 w-40 h-40 bg-primary/5 rounded-full blur-3xl"></div>
-                <img class="relative z-10 w-full rounded-lg shadow-xl translate-x-4 lg:translate-x-0" src="~/imgs/unnamed (5).png" />
-                <div class="absolute -bottom-12 -right-12 w-2/3 hidden lg:block">
-                    <img class="rounded-lg shadow-2xl border-4 border-surface" src="~/imgs/unnamed (2).png" />
-                </div>
+        <div class="text-center mb-20">
+            <span class="font-label text-primary text-xs tracking-[0.2em] uppercase mb-4 block">Everything You Need</span>
+            <h2 class="font-headline text-4xl md:text-5xl text-on-surface leading-tight mb-4">
+                Premium <span class="serif-italic">Wedding Services</span>
+            </h2>
+            <p class="font-body text-on-surface-variant max-w-xl mx-auto">
+                From fine dining to floral artistry — every detail curated to perfection.
+            </p>
+        </div>
+
+        @if (!Model.AdditionalServices.Any())
+        {
+            <div class="text-center py-16 text-on-surface-variant">
+                <span class="material-symbols-outlined text-6xl opacity-30 block mb-4">room_service</span>
+                <p class="font-headline text-2xl mb-2">No additional services yet</p>
+                <p class="font-body text-sm opacity-60">More curated services coming soon.</p>
             </div>
-            <div class="w-full lg:w-1/2">
-                <span class="font-label text-primary text-xs tracking-[0.2em] uppercase mb-4 block">Gastronomy</span>
-                <h2 class="font-headline text-4xl md:text-5xl text-on-surface mb-8 leading-tight">Curated <span class="serif-italic">Culinary</span> Experiences</h2>
-                <p class="font-body text-on-surface-variant text-lg leading-relaxed mb-10 max-w-md">
-                    Our Michelin-star partners craft bespoke menus that tell your story through flavor, using seasonal ingredients and avant-garde presentation.
-                </p>
-                <div class="space-y-6">
-                    <div class="flex items-start gap-4">
-                        <span class="material-symbols-outlined text-primary-container">restaurant_menu</span>
-                        <div>
-                            <h4 class="font-headline text-lg mb-1">Custom Tasting Menus</h4>
-                            <p class="text-sm text-on-surface-variant">Personalized 5-course journeys designed by world-renowned chefs.</p>
+        }
+        else
+        {
+            int rowIndex = 0;
+            foreach (var grp in grouped)
+            {
+                var info = typeLabels.ContainsKey(grp.Key) ? typeLabels[grp.Key] : new[] { "Service", "room_service" };
+                var label = info[0];
+                var icon  = info[1];
+                var sample = grp.First();
+                var sampleImg  = sample.MainImage;
+                var sampleDesc = sample.Description ?? "";
+                bool isLeft = (rowIndex % 2 == 0);
+                rowIndex++;
+
+                if (isLeft)
+                {
+                    <!-- Left-image layout -->
+                    <div class="flex flex-col lg:flex-row items-center gap-20 mb-40">
+                        <div class="w-full lg:w-1/2 relative">
+                            <div class="absolute -top-10 -left-10 w-40 h-40 bg-primary/5 rounded-full blur-3xl"></div>
+                            @if (!string.IsNullOrEmpty(sampleImg))
+                            {
+                                <img class="relative z-10 w-full rounded-lg shadow-xl" src="@sampleImg" alt="@label" />
+                            }
+                            else
+                            {
+                                <div class="relative z-10 w-full h-80 bg-primary-fixed/30 rounded-lg shadow-xl flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-primary" style="font-size:5rem;">@icon</span>
+                                </div>
+                            }
+                        </div>
+                        <div class="w-full lg:w-1/2">
+                            <span class="font-label text-primary text-xs tracking-[0.2em] uppercase mb-4 block">@label</span>
+                            <h2 class="font-headline text-4xl md:text-5xl text-on-surface mb-8 leading-tight">
+                                <span class="serif-italic">@label</span> Services
+                            </h2>
+                            @if (!string.IsNullOrEmpty(sampleDesc))
+                            {
+                                <p class="font-body text-on-surface-variant text-lg leading-relaxed mb-6 max-w-md">
+                                    @(sampleDesc.Length > 160 ? sampleDesc.Substring(0, 160) + "…" : sampleDesc)
+                                </p>
+                            }
+                            <div class="space-y-4 mb-8">
+                                @foreach (var svc in grp.Take(3))
+                                {
+                                    <div class="flex items-start gap-4">
+                                        <span class="material-symbols-outlined text-primary-container">@icon</span>
+                                        <div>
+                                            <h4 class="font-headline text-lg mb-0.5">@svc.Service_Name</h4>
+                                            <p class="text-sm text-on-surface-variant">@svc.City · @svc.Price.ToString("C") / hr</p>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <a asp-page="/ServiceDetail" asp-route-id="@sample.Id"
+                               class="inline-block font-label text-sm tracking-widest uppercase py-4 px-10 border border-outline-variant text-on-surface hover:bg-on-surface hover:text-surface transition-all">
+                                Book This Service
+                            </a>
                         </div>
                     </div>
-                    <div class="flex items-start gap-4">
-                        <span class="material-symbols-outlined text-primary-container">local_bar</span>
-                        <div>
-                            <h4 class="font-headline text-lg mb-1">Artisanal Mixology</h4>
-                            <p class="text-sm text-on-surface-variant">Signature cocktail bars featuring rare spirits and botanical infusions.</p>
+                }
+                else
+                {
+                    <!-- Right-image layout -->
+                    <div class="flex flex-col lg:flex-row-reverse items-center gap-20 mb-40">
+                        <div class="w-full lg:w-1/2 relative">
+                            @if (!string.IsNullOrEmpty(sampleImg))
+                            {
+                                <img class="relative z-10 w-full rounded-lg shadow-xl" src="@sampleImg" alt="@label" />
+                            }
+                            else
+                            {
+                                <div class="relative z-10 w-full h-80 bg-primary-fixed/30 rounded-lg shadow-xl flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-primary" style="font-size:5rem;">@icon</span>
+                                </div>
+                            }
+                        </div>
+                        <div class="w-full lg:w-1/2">
+                            <span class="font-label text-primary text-xs tracking-[0.2em] uppercase mb-4 block">@label</span>
+                            <h2 class="font-headline text-4xl md:text-5xl text-on-surface mb-8 leading-tight">
+                                <span class="serif-italic">@label</span> Services
+                            </h2>
+                            @if (!string.IsNullOrEmpty(sampleDesc))
+                            {
+                                <p class="font-body text-on-surface-variant text-lg leading-relaxed mb-6 max-w-md">
+                                    @(sampleDesc.Length > 160 ? sampleDesc.Substring(0, 160) + "…" : sampleDesc)
+                                </p>
+                            }
+                            <div class="space-y-4 mb-8">
+                                @foreach (var svc in grp.Take(3))
+                                {
+                                    <div class="flex items-start gap-4">
+                                        <span class="material-symbols-outlined text-primary-container">@icon</span>
+                                        <div>
+                                            <h4 class="font-headline text-lg mb-0.5">@svc.Service_Name</h4>
+                                            <p class="text-sm text-on-surface-variant">@svc.City · @svc.Price.ToString("C") / hr</p>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <a asp-page="/ServiceDetail" asp-route-id="@sample.Id"
+                               class="inline-block font-label text-sm tracking-widest uppercase py-4 px-10 border border-outline-variant text-on-surface hover:bg-on-surface hover:text-surface transition-all">
+                                Book This Service
+                            </a>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-        <!-- Decoration Section -->
-        <div class="flex flex-col lg:flex-row-reverse items-center gap-20">
-            <div class="w-full lg:w-1/2 relative">
-                <img class="relative z-10 w-full rounded-lg shadow-xl" src="~/imgs/unnamed (10).png" />
-                <div class="absolute -top-12 -left-12 w-1/2 hidden lg:block">
-                    <img class="rounded-lg shadow-2xl border-4 border-surface" src="~/imgs/unnamed (3).png" />
-                </div>
-            </div>
-            <div class="w-full lg:w-1/2">
-                <span class="font-label text-primary text-xs tracking-[0.2em] uppercase mb-4 block">Aesthetics</span>
-                <h2 class="font-headline text-4xl md:text-5xl text-on-surface mb-8 leading-tight">Editorial <span class="serif-italic">Floral</span> &amp; Decor</h2>
-                <p class="font-body text-on-surface-variant text-lg leading-relaxed mb-10 max-w-md">
-                    We transform spaces into ethereal landscapes. Our designers work with the world's finest florists to create immersive sensory environments.
-                </p>
-                <button class="font-label text-sm tracking-widest uppercase py-4 px-10 border border-outline-variant text-on-surface hover:bg-on-surface hover:text-surface transition-all">
-                    Explore Design Portfolios
-                </button>
-            </div>
-        </div>
+                }
+            }
+        }
     </div>
 </section>
 
-<!-- Luxury Stats -->
+<!-- ===================== STATS ===================== -->
 <section class="py-24 px-8">
     <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
         <div>
-            <div class="font-headline text-4xl text-primary mb-2">500+</div>
-            <div class="font-label text-[10px] tracking-[0.2em] uppercase text-on-surface-variant">Venues Worldwide</div>
+            <div class="font-headline text-4xl text-primary mb-2">@(Model.VenueServices.Any() ? Model.VenueServices.Count + "+" : "—")</div>
+            <div class="font-label text-[10px] tracking-[0.2em] uppercase text-on-surface-variant">Venues Listed</div>
         </div>
         <div>
-            <div class="font-headline text-4xl text-primary mb-2">12k</div>
-            <div class="font-label text-[10px] tracking-[0.2em] uppercase text-on-surface-variant">Stories Told</div>
-        </div>
-        <div>
-            <div class="font-headline text-4xl text-primary mb-2">85+</div>
-            <div class="font-label text-[10px] tracking-[0.2em] uppercase text-on-surface-variant">Global Awards</div>
+            <div class="font-headline text-4xl text-primary mb-2">@(Model.AdditionalServices.Any() ? Model.AdditionalServices.Count + "+" : "—")</div>
+            <div class="font-label text-[10px] tracking-[0.2em] uppercase text-on-surface-variant">Services Available</div>
         </div>
         <div>
             <div class="font-headline text-4xl text-primary mb-2">24/7</div>
             <div class="font-label text-[10px] tracking-[0.2em] uppercase text-on-surface-variant">Concierge Support</div>
         </div>
+        <div>
+            <div class="font-headline text-4xl text-primary mb-2">100%</div>
+            <div class="font-label text-[10px] tracking-[0.2em] uppercase text-on-surface-variant">Verified Providers</div>
+        </div>
     </div>
 </section>
+
+@section Scripts {
+    <script>
+        // Auto-hide toasts
+        setTimeout(function () {
+            document.querySelectorAll('[style*="position:fixed"]').forEach(function (el) {
+                el.style.transition = 'opacity 0.5s';
+                el.style.opacity = '0';
+                setTimeout(function () { el.remove(); }, 500);
+            });
+        }, 4000);
+
+        // Hero search — scrolls to venues section and optionally filters by city
+        document.getElementById('searchBtn').addEventListener('click', function () {
+            var city = document.getElementById('searchCity').value.trim().toLowerCase();
+            if (city) {
+                // Scroll to venues and highlight matches
+                document.getElementById('venues').scrollIntoView({ behavior: 'smooth' });
+            } else {
+                document.getElementById('venues').scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    </script>
+}
