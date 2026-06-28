@@ -89,7 +89,7 @@
         <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
             <!-- Large feature card -->
             <a asp-page="/ServiceDetail" asp-route-id="@first.Id"
-               class="md:col-span-7 group cursor-pointer block" style="text-decoration:none;color:inherit;">
+                   class="md:col-span-7 group cursor-pointer block" style="text-decoration:none;color:inherit;">
                 <div class="relative overflow-hidden rounded-lg aspect-[4/3] mb-6">
                     @if (!string.IsNullOrEmpty(first.MainImage))
                     {
@@ -127,7 +127,7 @@
                 @foreach (var venue in Model.VenueServices.Skip(1))
                 {
                     <a asp-page="/ServiceDetail" asp-route-id="@venue.Id"
-                       class="group cursor-pointer block" style="text-decoration:none;color:inherit;">
+                           class="group cursor-pointer block" style="text-decoration:none;color:inherit;">
                         <div class="relative overflow-hidden rounded-lg aspect-video mb-4">
                             @if (!string.IsNullOrEmpty(venue.MainImage))
                             {
@@ -180,9 +180,9 @@
             {
                 var info = typeLabels.ContainsKey(grp.Key) ? typeLabels[grp.Key] : new[] { "Service", "room_service" };
                 var label = info[0];
-                var icon  = info[1];
+                var icon = info[1];
                 var sample = grp.First();
-                var sampleImg  = sample.MainImage;
+                var sampleImg = sample.MainImage;
                 var sampleDesc = sample.Description ?? "";
                 bool isLeft = (rowIndex % 2 == 0);
                 rowIndex++;
@@ -228,7 +228,7 @@
                                 }
                             </div>
                             <a asp-page="/ServiceDetail" asp-route-id="@sample.Id"
-                               class="inline-block font-label text-sm tracking-widest uppercase py-4 px-10 border border-outline-variant text-on-surface hover:bg-on-surface hover:text-surface transition-all">
+                                   class="inline-block font-label text-sm tracking-widest uppercase py-4 px-10 border border-outline-variant text-on-surface hover:bg-on-surface hover:text-surface transition-all">
                                 Book This Service
                             </a>
                         </div>
@@ -274,7 +274,7 @@
                                 }
                             </div>
                             <a asp-page="/ServiceDetail" asp-route-id="@sample.Id"
-                               class="inline-block font-label text-sm tracking-widest uppercase py-4 px-10 border border-outline-variant text-on-surface hover:bg-on-surface hover:text-surface transition-all">
+                                   class="inline-block font-label text-sm tracking-widest uppercase py-4 px-10 border border-outline-variant text-on-surface hover:bg-on-surface hover:text-surface transition-all">
                                 Book This Service
                             </a>
                         </div>
@@ -308,25 +308,128 @@
 </section>
 
 @section Scripts {
-    <script>
-        // Auto-hide toasts
-        setTimeout(function () {
-            document.querySelectorAll('[style*="position:fixed"]').forEach(function (el) {
-                el.style.transition = 'opacity 0.5s';
-                el.style.opacity = '0';
-                setTimeout(function () { el.remove(); }, 500);
-            });
-        }, 4000);
+    <button id="chatToggleBtn" class="fixed bottom-6 right-6 bg-[#b2905a] text-white p-4 rounded-full shadow-2xl hover:bg-[#9a7b4c] transition-all duration-300 z-50 flex items-center justify-center group">
+        <svg id="chatIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 transition-transform duration-300 group-hover:scale-110">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
+        </svg>
+        <svg id="closeIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hidden transition-transform duration-300 group-hover:scale-110">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+    </button>
 
-        // Hero search — scrolls to venues section and optionally filters by city
-        document.getElementById('searchBtn').addEventListener('click', function () {
-            var city = document.getElementById('searchCity').value.trim().toLowerCase();
-            if (city) {
-                // Scroll to venues and highlight matches
-                document.getElementById('venues').scrollIntoView({ behavior: 'smooth' });
+    <div id="chatWindow" class="fixed bottom-24 right-6 w-96 h-[500px] bg-white rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden border border-gray-100 hidden opacity-0 translate-y-4 transition-all duration-300">
+        <div class="bg-[#b2905a] p-4 text-white flex items-center justify-between shadow-md">
+            <div class="flex items-center space-x-3">
+                <div class="w-2.5 h-2.5 bg-green-400 rounded-full animate-pulse"></div>
+                <span class="font-semibold tracking-wide">WeddingAI Assistant</span>
+            </div>
+        </div>
+
+        <div id="chatMessages" class="flex-1 p-4 overflow-y-auto space-y-4 bg-gray-50 text-sm">
+            <div class="flex items-start space-x-2">
+                <div class="bg-[#b2905a] text-white p-3 rounded-2xl rounded-tl-none max-w-[80%] shadow-sm">
+                    مرحباً بك في WeddingAI! كيف يمكنني مساعدتك في التخطيط لحفل زفافك اليوم؟
+                </div>
+            </div>
+        </div>
+
+        <div class="p-3 bg-white border-t border-gray-100 flex items-center space-x-2">
+            <input type="text" id="chatInput" placeholder="اكتب رسالتك هنا..." class="flex-1 border border-gray-200 rounded-full px-4 py-2 text-sm focus:outline-none focus:border-[#b2905a] transition-colors" />
+            <button id="sendChatBtn" class="bg-[#b2905a] text-white p-2 rounded-full hover:bg-[#9a7b4c] transition-colors shadow-md">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 transform rotate-90">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const chatToggleBtn = document.getElementById('chatToggleBtn');
+        const chatWindow = document.getElementById('chatWindow');
+        const chatIcon = document.getElementById('chatIcon');
+        const closeIcon = document.getElementById('closeIcon');
+        const chatInput = document.getElementById('chatInput');
+        const sendChatBtn = document.getElementById('sendChatBtn');
+        const chatMessages = document.getElementById('chatMessages');
+
+        // دالة التبديل بين فتح وإغلاق الشات
+        chatToggleBtn.addEventListener('click', () => {
+            if (chatWindow.classList.contains('hidden')) {
+                // فتح الشات بـ Animation سلس
+                chatWindow.classList.remove('hidden');
+                setTimeout(() => {
+                    chatWindow.classList.remove('opacity-0', 'translate-y-4');
+                    chatWindow.classList.add('opacity-100', 'translate-y-0');
+                }, 10);
+                chatIcon.classList.add('hidden');
+                closeIcon.classList.remove('hidden');
             } else {
-                document.getElementById('venues').scrollIntoView({ behavior: 'smooth' });
+                // إغلاق الشات
+                chatWindow.classList.remove('opacity-100', 'translate-y-0');
+                chatWindow.classList.add('opacity-0', 'translate-y-4');
+                chatIcon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
+                setTimeout(() => {
+                    chatWindow.classList.add('hidden');
+                }, 300);
             }
+        });
+
+        // دالة إرسال الرسالة وإظهارها في الواجهة
+        async function sendMessage() {
+            const text = chatInput.value.trim();
+            if (!text) return;
+
+            // 1. عرض رسالة المستخدم في واجهة التشات
+            const userMsgDiv = document.createElement('div');
+            userMsgDiv.className = "flex items-start justify-end space-x-2";
+            userMsgDiv.innerHTML = `<div class="bg-gray-200 text-gray-800 p-3 rounded-2xl rounded-tr-none max-w-[80%] shadow-sm">${text}</div>`;
+            chatMessages.appendChild(userMsgDiv);
+            chatInput.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // 2. إظهار مؤشر جاري الكتابة لبوت الـ AI
+            const typingDiv = document.createElement('div');
+            typingDiv.className = "flex items-start space-x-2 id-typing";
+            typingDiv.innerHTML = `<div class="bg-[#b2905a] text-white p-3 rounded-2xl rounded-tl-none max-w-[80%] shadow-sm italic animate-pulse">جاري التفكير...</div>`;
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            try {
+                // 3. إرسال الطلب لـ API الـ FastAPI الخلفي
+                const response = await fetch('http://localhost:8000/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: text })
+                });
+
+                const data = await response.json();
+                
+                // إزالة مؤشر جاري الكتابة
+                typingDiv.remove();
+
+                // 4. عرض رد البوت في واجهة التشات
+                const botMsgDiv = document.createElement('div');
+                botMsgDiv.className = "flex items-start space-x-2";
+                botMsgDiv.innerHTML = `<div class="bg-[#b2905a] text-white p-3 rounded-2xl rounded-tl-none max-w-[80%] shadow-sm">${data.reply || data.response || 'عذراً، لم أفهم الرد.'}</div>`;
+                chatMessages.appendChild(botMsgDiv);
+            } catch (error) {
+                console.error("Error communicating with AI backend:", error);
+                typingDiv.remove();
+                
+                // عرض رسالة خطأ في حال فشل الاتصال بالـ API
+                const errorDiv = document.createElement('div');
+                errorDiv.className = "flex items-start space-x-2";
+                errorDiv.innerHTML = `<div class="bg-red-100 text-red-700 p-3 rounded-2xl rounded-tl-none max-w-[80%] shadow-sm">حدث خطأ أثناء الاتصال بالخادم. يرجى التأكد من تشغيل FastAPI.</div>`;
+                chatMessages.appendChild(errorDiv);
+            }
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // تفعيل الإرسال عند الضغط على زر الإرسال أو زر Enter
+        sendChatBtn.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
         });
     </script>
 }

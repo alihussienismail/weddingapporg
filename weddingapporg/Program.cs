@@ -64,5 +64,5 @@ using (var scope = app.Services.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<weddingapporg.Data.ApplicationDbContext>();
     await weddingapporg.Data.DataSeeder.SeedServicesAsync(db);
 }
-
+app.UseStaticFiles(); // هذا السطر يسمح للسيرفر بقراءة مجلد wwwroot
 app.Run();
