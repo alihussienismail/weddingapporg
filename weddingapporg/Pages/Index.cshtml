@@ -397,10 +397,10 @@
 
             try {
                 // 3. إرسال الطلب لـ API الـ FastAPI الخلفي
-                const response = await fetch('http://localhost:8000/api/chat', {
+                const response = await fetch('http://localhost:8000/ask-ai', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: text })
+                    body: JSON.stringify({ messagetxt: text })
                 });
 
                 const data = await response.json();
@@ -411,7 +411,7 @@
                 // 4. عرض رد البوت في واجهة التشات
                 const botMsgDiv = document.createElement('div');
                 botMsgDiv.className = "flex items-start space-x-2";
-                botMsgDiv.innerHTML = `<div class="bg-[#b2905a] text-white p-3 rounded-2xl rounded-tl-none max-w-[80%] shadow-sm">${data.reply || data.response || 'عذراً، لم أفهم الرد.'}</div>`;
+                botMsgDiv.innerHTML = `<div class="bg-[#b2905a] text-white p-3 rounded-2xl rounded-tl-none max-w-[80%] shadow-sm">${data.ai_response}</div>`;
                 chatMessages.appendChild(botMsgDiv);
             } catch (error) {
                 console.error("Error communicating with AI backend:", error);
