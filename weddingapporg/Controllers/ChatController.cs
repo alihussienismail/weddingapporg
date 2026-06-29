@@ -6,10 +6,13 @@ namespace weddingapporg.Controllers
     public class ChatController : Controller
     {
         private readonly IChatClient _chatClient;
+        private readonly ILogger<ChatController> _logger;
 
-        public ChatController(IChatClient chatClient)
+        // ✅ تم إصلاح الـ Constructor عشان يستقبل الـ ILogger
+        public ChatController(IChatClient chatClient, ILogger<ChatController> logger)
         {
             _chatClient = chatClient;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -22,15 +25,14 @@ namespace weddingapporg.Controllers
 
             try
             {
-                // Send the user prompt to the local llama3.2 model
-                var response = await _chatClient.CompleteAsync(request.Message);
-
-                return Json(new { response = response.Message.Text });
+                // ✅ استخدام GetResponseAsync (الصحيحة لـ IChatClient)
+                var response = await _chatClient.GetResponseAsync(request.Message);
+                return Json(new { response = response.Text });
             }
             catch (Exception ex)
             {
-                // Gracefully handle if Ollama isn't running or crashes
-                return Json(new { response = "Error: Unable to reach the local AI. Ensure Ollama is running." });
+                _logger.LogError(ex, "Error sending message");
+                return BadRequest("Message wasn't sent.");
             }
         }
     }
