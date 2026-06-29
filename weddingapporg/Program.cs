@@ -1,3 +1,5 @@
+using Microsoft.Extensions.AI;
+using OllamaSharp;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Stripe;
@@ -16,6 +18,8 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
+builder.Services.AddSingleton<IChatClient>(sp =>
+    new OllamaApiClient(new Uri("http://localhost:11434/"), "llama3.2"));
 builder.Services.AddScoped<CartService>();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
