@@ -317,24 +317,47 @@
         </svg>
     </button>
 
-    <div id="chatWindow" class="fixed bottom-24 right-6 w-96 h-[500px] bg-white rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden border border-gray-100 hidden opacity-0 translate-y-4 transition-all duration-300">
+    <div id="chatWindow" class="fixed bottom-24 right-6 w-96 h-[540px] bg-white rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden border border-gray-100 hidden opacity-0 translate-y-4 transition-all duration-300">
+        <!-- Header -->
         <div class="bg-[#b2905a] p-4 text-white flex items-center justify-between shadow-md">
             <div class="flex items-center space-x-3">
                 <div class="w-2.5 h-2.5 bg-green-400 rounded-full animate-pulse"></div>
-                <span class="font-semibold tracking-wide">WeddingAI Assistant</span>
-            </div>
-        </div>
-
-        <div id="chatMessages" class="flex-1 p-4 overflow-y-auto space-y-4 bg-gray-50 text-sm">
-            <div class="flex items-start space-x-2">
-                <div class="bg-[#b2905a] text-white p-3 rounded-2xl rounded-tl-none max-w-[80%] shadow-sm">
-                    مرحباً بك في WeddingAI! كيف يمكنني مساعدتك في التخطيط لحفل زفافك اليوم؟
+                <div>
+                    <span class="font-semibold tracking-wide block leading-tight">WeddingAI Concierge</span>
+                    <span class="text-[11px] opacity-90 block">
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <text>👤 Logged in as: <strong>@(User.Identity?.Name ?? "User")</strong></text>
+                        }
+                        else
+                        {
+                            <text>👤 Guest mode · <a href="/Identity/Account/Login" class="underline hover:text-amber-100">Sign in to book</a></text>
+                        }
+                    </span>
                 </div>
             </div>
         </div>
 
+        <!-- Messages Area -->
+        <div id="chatMessages" class="flex-1 p-4 overflow-y-auto space-y-4 bg-gray-50 text-sm">
+            <div class="flex items-start space-x-2">
+                <div class="bg-[#b2905a] text-white p-3.5 rounded-2xl rounded-tl-none max-w-[85%] shadow-sm leading-relaxed">
+                    مرحباً بك في WeddingAI! 🌸<br />
+                    أنا مساعدك الذكي لحجوزات الأعراس. يمكنك الاستفسار عن الأماكن والخدمات المتاحة والمواعيد الشاغرة، أو طلب الحجز مباشرة هنا!
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick suggestion chips -->
+        <div class="px-3 py-1.5 bg-gray-100 flex items-center gap-1.5 overflow-x-auto no-scrollbar text-xs">
+            <button type="button" onclick="sendQuickPrompt('What wedding venues are available?')" class="whitespace-nowrap px-2.5 py-1 bg-white hover:bg-[#b2905a] hover:text-white rounded-full border border-gray-200 text-gray-700 transition-colors shadow-xs">🏰 Available Venues</button>
+            <button type="button" onclick="sendQuickPrompt('What slots are available for Photography tomorrow?')" class="whitespace-nowrap px-2.5 py-1 bg-white hover:bg-[#b2905a] hover:text-white rounded-full border border-gray-200 text-gray-700 transition-colors shadow-xs">📸 Photography Slots</button>
+            <button type="button" onclick="sendQuickPrompt('Show me available catering services')" class="whitespace-nowrap px-2.5 py-1 bg-white hover:bg-[#b2905a] hover:text-white rounded-full border border-gray-200 text-gray-700 transition-colors shadow-xs">🍽️ Catering</button>
+        </div>
+
+        <!-- Input Area -->
         <div class="p-3 bg-white border-t border-gray-100 flex items-center space-x-2">
-            <input type="text" id="chatInput" placeholder="اكتب رسالتك هنا..." class="flex-1 border border-gray-200 rounded-full px-4 py-2 text-sm focus:outline-none focus:border-[#b2905a] transition-colors" />
+            <input type="text" id="chatInput" placeholder="Ask about availability or request a booking..." class="flex-1 border border-gray-200 rounded-full px-4 py-2 text-sm focus:outline-none focus:border-[#b2905a] transition-colors" />
             <button id="sendChatBtn" class="bg-[#b2905a] text-white p-2 rounded-full hover:bg-[#9a7b4c] transition-colors shadow-md">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 transform rotate-90">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
@@ -344,6 +367,10 @@
     </div>
 
     <script>
+        const currentUserId = "@(User.Identity?.IsAuthenticated == true ? (User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "") : "")";
+        const currentUserName = "@(User.Identity?.IsAuthenticated == true ? (User.Identity?.Name ?? "User") : "")";
+        const currentUserEmail = "@(User.Identity?.IsAuthenticated == true ? (User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? "") : "")";
+
         const chatToggleBtn = document.getElementById('chatToggleBtn');
         const chatWindow = document.getElementById('chatWindow');
         const chatIcon = document.getElementById('chatIcon');
@@ -352,10 +379,9 @@
         const sendChatBtn = document.getElementById('sendChatBtn');
         const chatMessages = document.getElementById('chatMessages');
 
-        // دالة التبديل بين فتح وإغلاق الشات
+        // Toggle chat modal
         chatToggleBtn.addEventListener('click', () => {
             if (chatWindow.classList.contains('hidden')) {
-                // فتح الشات بـ Animation سلس
                 chatWindow.classList.remove('hidden');
                 setTimeout(() => {
                     chatWindow.classList.remove('opacity-0', 'translate-y-4');
@@ -364,7 +390,6 @@
                 chatIcon.classList.add('hidden');
                 closeIcon.classList.remove('hidden');
             } else {
-                // إغلاق الشات
                 chatWindow.classList.remove('opacity-100', 'translate-y-0');
                 chatWindow.classList.add('opacity-0', 'translate-y-4');
                 chatIcon.classList.remove('hidden');
@@ -375,58 +400,73 @@
             }
         });
 
-        // دالة إرسال الرسالة وإظهارها في الواجهة
+        function sendQuickPrompt(promptText) {
+            chatInput.value = promptText;
+            sendMessage();
+        }
+
+        function formatAiResponse(text) {
+            if (!text) return "";
+            let formatted = text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/`([^`]+)`/g, '<code class="bg-amber-100 text-amber-900 px-1 rounded text-xs">$1</code>')
+                .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-amber-800 underline font-semibold hover:text-amber-900">$1</a>')
+                .replace(/\n/g, '<br/>');
+            return formatted;
+        }
+
         async function sendMessage() {
             const text = chatInput.value.trim();
             if (!text) return;
 
-            // 1. عرض رسالة المستخدم في واجهة التشات
+            // 1. Render User Message
             const userMsgDiv = document.createElement('div');
             userMsgDiv.className = "flex items-start justify-end space-x-2";
-            userMsgDiv.innerHTML = `<div class="bg-gray-200 text-gray-800 p-3 rounded-2xl rounded-tr-none max-w-[80%] shadow-sm">${text}</div>`;
+            userMsgDiv.innerHTML = `<div class="bg-gray-200 text-gray-800 p-3 rounded-2xl rounded-tr-none max-w-[85%] shadow-sm">${text}</div>`;
             chatMessages.appendChild(userMsgDiv);
             chatInput.value = '';
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            // 2. إظهار مؤشر جاري الكتابة لبوت الـ AI
+            // 2. Typing indicator
             const typingDiv = document.createElement('div');
             typingDiv.className = "flex items-start space-x-2 id-typing";
-            typingDiv.innerHTML = `<div class="bg-[#b2905a] text-white p-3 rounded-2xl rounded-tl-none max-w-[80%] shadow-sm italic animate-pulse">جاري التفكير...</div>`;
+            typingDiv.innerHTML = `<div class="bg-[#b2905a] text-white p-3 rounded-2xl rounded-tl-none max-w-[85%] shadow-sm italic animate-pulse">جاري البحث والتحقق من التوفر...</div>`;
             chatMessages.appendChild(typingDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
             try {
-                // 3. إرسال الطلب لـ API الـ FastAPI الخلفي
+                // 3. Request to FastAPI Backend with User Identity
                 const response = await fetch('http://localhost:8000/ask-ai', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ messagetxt: text })
+                    body: JSON.stringify({
+                        messagetxt: text,
+                        user_id: currentUserId || null,
+                        user_name: currentUserName || null,
+                        user_email: currentUserEmail || null
+                    })
                 });
 
                 const data = await response.json();
-                
-                // إزالة مؤشر جاري الكتابة
                 typingDiv.remove();
 
-                // 4. عرض رد البوت في واجهة التشات
+                // 4. Render AI Response
                 const botMsgDiv = document.createElement('div');
                 botMsgDiv.className = "flex items-start space-x-2";
-                botMsgDiv.innerHTML = `<div class="bg-[#b2905a] text-white p-3 rounded-2xl rounded-tl-none max-w-[80%] shadow-sm">${data.ai_response}</div>`;
+                botMsgDiv.innerHTML = `<div class="bg-[#b2905a] text-white p-3.5 rounded-2xl rounded-tl-none max-w-[85%] shadow-sm leading-relaxed">${formatAiResponse(data.ai_response)}</div>`;
                 chatMessages.appendChild(botMsgDiv);
             } catch (error) {
                 console.error("Error communicating with AI backend:", error);
                 typingDiv.remove();
-                
-                // عرض رسالة خطأ في حال فشل الاتصال بالـ API
                 const errorDiv = document.createElement('div');
                 errorDiv.className = "flex items-start space-x-2";
-                errorDiv.innerHTML = `<div class="bg-red-100 text-red-700 p-3 rounded-2xl rounded-tl-none max-w-[80%] shadow-sm">حدث خطأ أثناء الاتصال بالخادم. يرجى التأكد من تشغيل FastAPI.</div>`;
+                errorDiv.innerHTML = `<div class="bg-red-100 text-red-700 p-3 rounded-2xl rounded-tl-none max-w-[85%] shadow-sm">⚠️ حدث خطأ أثناء الاتصال بالخادم. يرجى التأكد من تشغيل خادم FastAPI (main.py).</div>`;
                 chatMessages.appendChild(errorDiv);
             }
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        // تفعيل الإرسال عند الضغط على زر الإرسال أو زر Enter
         sendChatBtn.addEventListener('click', sendMessage);
         chatInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') sendMessage();

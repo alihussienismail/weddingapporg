@@ -4,55 +4,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WeddingAI Premium Assistant</title>
+    <title>WeddingAI Concierge Assistant</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-gradient: linear-gradient(135deg, #d4a373 0%, #b98a5c 100%);
-            /* ذهبي ملكي للأعراس */
-            --bg-light: #f8f9fa;
+            --primary-gradient: linear-gradient(135deg, #775a19 0%, #b2905a 100%);
+            --bg-light: #faf9f8;
             --chat-bg: #ffffff;
-            --text-dark: #212529;
-            --text-muted: #6c757d;
-            --user-bubble: #d4a373;
+            --text-dark: #1a1c1c;
+            --text-muted: #7f7667;
+            --user-bubble: #775a19;
         }
 
         body {
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: #f4f7f6;
+            background: #f4f3f2;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
-        /* نافذة المحادثة الفخمة */
         #chat-window {
             width: 100%;
-            max-width: 450px;
-            height: 600px;
+            max-width: 480px;
+            height: 650px;
             background: var(--chat-bg);
-            border-radius: 16px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            border-radius: 20px;
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08);
             display: flex;
             flex-direction: column;
             overflow: hidden;
             border: 1px solid #eef0f2;
         }
 
-        /* الهيدر أو الرأسية العليا */
         .chat-header {
             background: var(--primary-gradient);
             color: white;
-            padding: 20px;
+            padding: 16px 20px;
             display: flex;
             align-items: center;
-            gap: 15px;
-        }
-
-        .chat-header i {
-            font-size: 22px;
+            justify-content: space-between;
         }
 
         .chat-header .title {
@@ -70,8 +65,7 @@
             margin-top: 2px;
         }
 
-        .status::before {
-            content: '';
+        .status-dot {
             width: 8px;
             height: 8px;
             background: #2a9d8f;
@@ -79,10 +73,29 @@
             display: inline-block;
         }
 
-        /* منطقة عرض الرسائل */
+        /* User Simulator Bar */
+        .user-sim-bar {
+            background: #f1f0f0;
+            padding: 8px 16px;
+            font-size: 12px;
+            color: #555;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .user-sim-bar select {
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            background: white;
+        }
+
         #messages-zone {
             flex: 1;
-            padding: 20px;
+            padding: 16px;
             overflow-y: auto;
             background-color: var(--bg-light);
             display: flex;
@@ -90,15 +103,14 @@
             gap: 12px;
         }
 
-        /* تصميم فقاعات المحادثة (Bubbles) */
         .bubble {
-            max-width: 80%;
+            max-width: 85%;
             padding: 12px 16px;
-            border-radius: 14px;
-            font-size: 14px;
-            line-height: 1.5;
+            border-radius: 16px;
+            font-size: 13.5px;
+            line-height: 1.55;
             word-wrap: break-word;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
         }
 
         .bubble.ai-type {
@@ -109,6 +121,24 @@
             border: 1px solid #e9ecef;
         }
 
+        .bubble.ai-type strong {
+            color: #775a19;
+        }
+
+        .bubble.ai-type a {
+            color: #775a19;
+            text-decoration: underline;
+            font-weight: 600;
+        }
+
+        .bubble.ai-type code {
+            background: #fef3c7;
+            color: #78350f;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-size: 11.5px;
+        }
+
         .bubble.user-type {
             background: var(--user-bubble);
             color: white;
@@ -116,38 +146,65 @@
             border-top-right-radius: 2px;
         }
 
-        /* منطقة الإدخال السفلية */
+        .chips-container {
+            padding: 8px 12px;
+            background: #f8f9fa;
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            border-top: 1px solid #f1f3f5;
+        }
+
+        .chip-btn {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11.5px;
+            color: #555;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .chip-btn:hover {
+            background: #775a19;
+            color: white;
+            border-color: #775a19;
+        }
+
         .input-container {
-            padding: 15px 20px;
+            padding: 12px 16px;
             background: white;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             border-top: 1px solid #f1f3f5;
         }
 
         .input-container input {
             flex: 1;
-            border: none;
-            padding: 12px 20px;
-            font-size: 14px;
-            background: #f1f3f5;
+            border: 1px solid #e2e8f0;
+            padding: 10px 16px;
+            font-size: 13.5px;
+            background: #f8fafc;
             border-radius: 24px;
             outline: none;
             transition: all 0.2s;
         }
 
         .input-container input:focus {
-            background: #e9ecef;
-            box-shadow: inset 0 0 0 1px #d4a373;
+            background: white;
+            border-color: #775a19;
+            box-shadow: 0 0 0 2px rgba(119, 90, 25, 0.15);
         }
 
         .input-container button {
             background: var(--primary-gradient);
             color: white;
             border: none;
-            width: 40px;
-            height: 40px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
@@ -160,13 +217,12 @@
             transform: scale(1.05);
         }
 
-        /* انميشن ومؤشر انتظار تفكير الـ AI */
         .typing-indicator {
             display: none;
             align-self: flex-start;
             background: transparent;
-            padding: 5px 10px;
-            font-size: 13px;
+            padding: 4px 8px;
+            font-size: 12px;
             color: var(--text-muted);
         }
     </style>
@@ -176,32 +232,83 @@
 
     <div id="chat-window">
         <div class="chat-header">
-            <i class="fas fa-sparkles"></i>
-            <div>
-                <div class="title">WeddingAI Assistant</div>
-                <div class="status">Online | Powered by Llama 3.2</div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <i class="fas fa-sparkles" style="font-size: 20px;"></i>
+                <div>
+                    <div class="title">WeddingAI Concierge</div>
+                    <div class="status"><span class="status-dot"></span> Online | Real-Time DB Slots</div>
+                </div>
             </div>
+        </div>
+
+        <div class="user-sim-bar">
+            <span>Identity:</span>
+            <select id="userSelector" onchange="updateUserIdentity()">
+                <option value="authenticated">👤 Logged In (Sarah Jenkins - ID: usr_101)</option>
+                <option value="guest">👤 Guest (Not Authenticated)</option>
+            </select>
         </div>
 
         <div id="messages-zone">
-            <div class="bubble ai-type">Hello! Welcome to our premier planning platform. How can I assist you with your
-                wedding reservations or service inquiries today? ✨</div>
-            <div id="typing" class="typing-indicator"><i class="fas fa-circle-notch fa-spin"></i> AI is thinking...
+            <div class="bubble ai-type">
+                Hello! Welcome to WeddingAI Concierge. 🌸<br />
+                I can check real-time available dates and time slots for venues, photography, catering, and entertainment, or book directly for you!
             </div>
+            <div id="typing" class="typing-indicator"><i class="fas fa-circle-notch fa-spin"></i> Checking availability...</div>
+        </div>
+
+        <div class="chips-container">
+            <button class="chip-btn" onclick="sendPrompt('What venues are available for booking?')">🏰 Available Venues</button>
+            <button class="chip-btn" onclick="sendPrompt('What slots are available for Photography tomorrow?')">📸 Photography Slots</button>
+            <button class="chip-btn" onclick="sendPrompt('Book Royal Crystal Palace tomorrow')">📅 Book Venue</button>
         </div>
 
         <div class="input-container">
-            <input type="text" id="chat-input" placeholder="Type your message here..."
+            <input type="text" id="chat-input" placeholder="Ask about slots or request a booking..."
                 onkeypress="handleKeyPress(event)">
             <button onclick="processMessage()"><i class="fas fa-paper-plane"></i></button>
         </div>
     </div>
 
     <script>
+        let currentUser = {
+            id: "usr_101",
+            name: "Sarah Jenkins",
+            email: "sarah@example.com"
+        };
+
+        function updateUserIdentity() {
+            const val = document.getElementById('userSelector').value;
+            if (val === 'authenticated') {
+                currentUser = {
+                    id: "usr_101",
+                    name: "Sarah Jenkins",
+                    email: "sarah@example.com"
+                };
+            } else {
+                currentUser = { id: null, name: null, email: null };
+            }
+        }
+
         function handleKeyPress(e) {
             if (e.key === 'Enter') {
                 processMessage();
             }
+        }
+
+        function sendPrompt(text) {
+            document.getElementById('chat-input').value = text;
+            processMessage();
+        }
+
+        function formatAiText(text) {
+            if (!text) return "";
+            return text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/`([^`]+)`/g, '<code>$1</code>')
+                .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
+                .replace(/\n/g, '<br/>');
         }
 
         async function processMessage() {
@@ -230,7 +337,12 @@
                 const response = await fetch('http://localhost:8000/ask-ai', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ messagetxt: userText })
+                    body: JSON.stringify({
+                        messagetxt: userText,
+                        user_id: currentUser.id,
+                        user_name: currentUser.name,
+                        user_email: currentUser.email
+                    })
                 });
 
                 const data = await response.json();
@@ -238,14 +350,14 @@
                 // 4. Render Live AI Response
                 const aiBubble = document.createElement('div');
                 aiBubble.className = 'bubble ai-type';
-                aiBubble.innerText = data.ai_response;
+                aiBubble.innerHTML = formatAiText(data.ai_response);
                 zone.insertBefore(aiBubble, indicator);
 
             } catch (error) {
                 const errorBubble = document.createElement('div');
                 errorBubble.className = 'bubble ai-type';
-                errorBubble.style.color = '#e63946';
-                errorBubble.innerText = 'Sorry, an error occurred while connecting to the server.';
+                errorBubble.style.color = '#ba1a1a';
+                errorBubble.innerText = '⚠️ Sorry, an error occurred while connecting to the FastAPI backend. Please make sure main.py is running on port 8000.';
                 zone.insertBefore(errorBubble, indicator);
             } finally {
                 // 5. Hide Loader
